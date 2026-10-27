@@ -38,7 +38,7 @@
     if (!header || !toggle || !nav) return;
 
     // Everything outside the header goes inert while the menu is open (the skip link too)
-    const outside = [document.querySelector('.skip-link'), document.querySelector('main'), document.querySelector('footer')].filter(Boolean);
+    const outside = [document.querySelector('.skip-link'), document.querySelector('main'), document.querySelector('footer'), document.querySelector('.demo-note')].filter(Boolean);
 
     toggle.setAttribute('role', 'button');
     toggle.setAttribute('aria-expanded', 'false');

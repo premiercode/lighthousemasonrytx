@@ -2241,6 +2241,24 @@
     color: var(--slate-300);
   }
 
+  /* Pitch disclosure strip below the footer — remove at launch */
+  .demo-note {
+    padding-block: var(--space-3);
+    background: var(--lime-200);
+    color: var(--mortar-600);
+    font-size: 0.8125rem;
+    text-align: center;
+    /* Inline link in a sentence: exempt from 2.5.8, padded for a comfier tap */
+    & a {
+      padding-block: 0.6rem;
+      color: var(--brick-text);
+      font-weight: 600;
+      text-underline-offset: 0.2em;
+      overflow-wrap: anywhere;
+    }
+    & a:hover { color: var(--night-900); }
+  }
+
   .site-footer__legal { display: none; }
   @media (max-width: 719.98px) {
     .site-footer__legal-group { display: none; }
