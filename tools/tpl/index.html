@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Design preview: keep out of search engines until launch -->
+  <meta name="robots" content="noindex, nofollow">
+  <title>Lighthouse Masonry, Inc. | Commercial &amp; Residential Masonry in Dallas–Fort Worth, TX</title>
+  <meta name="description" content="Texas masonry contractor for commercial and residential brick and stone: screening walls, archways, cleaning, sealing and repairs across Dallas–Fort Worth. Free on-site estimates.">
+  <meta name="theme-color" content="#0f1828">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@500;600&display=swap">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Flag JS early so reveal styles only apply when JS can un-hide content -->
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+<!-- ===================================================================
+     LINKS TO FUTURE PAGES
+     Hosted on GitHub Pages. Links already use the full build's clean URLs
+     (/services/<slug>/, /commercial/, /residential/, /service-areas/<town>/,
+     /projects/, /about/, /contact/, /careers/, /faq/, /privacy-policy/,
+     /terms/, /accessibility/, /sitemap/). Until those pages exist,
+     GitHub Pages serves /404.html, which says the page is coming in the
+     full build and links back here.
+     =================================================================== -->
+
+<!-- ===================================================================
+     ICON SPRITE
+     =================================================================== -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo mark (temporary, small-size version): four brick courses, solid dome, one beam -->
+  @@mark@@
+
+@@icons@@
+@@i-google@@
+
+  <!-- Service illustrations (64 × 64). Colors come from --ill-* custom properties. -->
+@@svc-symbols@@
+</svg>
+
+@@header@@
+
+<main id="main" tabindex="-1">
+
+<!-- ===================================================================
+     HERO — SIGNATURE: a screening wall is laid course by course,
+     the caps land, then the lighthouse beam comes on and finds it.
+     Pure SVG + CSS (transform/opacity). Finished state is the default;
+     the build only plays under prefers-reduced-motion: no-preference,
+     and only on the first visit of a session (.hero--built skips it).
+     =================================================================== -->
+<section class="hero" aria-labelledby="hero-title">
+  <script>try{var h=document.currentScript.parentNode;if(sessionStorage.getItem('lm-hero-built'))h.classList.add('hero--built');else sessionStorage.setItem('lm-hero-built','1')}catch(e){}</script>
+  <div class="hero__sky" aria-hidden="true"></div>
+
+  <div class="hero-lh" aria-hidden="true">
+    <span class="hero-lh__beam"></span>
+    <span class="hero-lh__beam hero-lh__beam--back"></span>
+@@lighthouse@@
+  </div>
+  <div class="hero__haze" aria-hidden="true"></div>
+
+  <div class="hero__inner container">
+    <div class="hero__copy">
+      <p class="eyebrow eyebrow--light hero__eyebrow"><span class="hero__eyebrow-long">Commercial &amp; residential masonry · Dallas–Fort Worth</span><span class="hero__eyebrow-short">DFW masonry</span></p><!-- PLACEHOLDER: home base -->
+
+      <h1 class="hero__title" id="hero-title">
+        <span class="line"><span>Walls that</span></span>
+        <span class="line"><span>stay straight</span></span>
+        <span class="line"><span>on Texas clay.</span></span>
+        <span class="line line--serif"><span>Built to last.</span></span>
+      </h1>
+
+      <p class="hero__lede">
+        Screening walls, archways, storefronts and custom homes on footings sized for shifting clay, backed by a written warranty.
+      </p>
+
+      <div class="hero__ctas">
+        <a class="btn btn--beacon btn--lg" href="#estimate">
+          Get a free estimate
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+        <a class="btn btn--outline-light btn--lg hero__alt" href="#services">View services <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-wall" aria-hidden="true" data-hero-wall>
+@@wall@@
+    <div class="hero-wall__light"></div>
+    <div class="hero-wall__grain"></div>
+  </div>
+</section>
+
+<!-- ===================================================================
+     TRUST STRIP — the cast-stone footing the wall stands on
+     =================================================================== -->
+<section class="trust" aria-label="Lighthouse Masonry at a glance">
+  <!-- PLACEHOLDER: every figure in this strip needs client confirmation -->
+  <dl class="trust__list container">
+    <div class="trust__item" data-reveal>
+      <dt>Years laying Texas brick</dt>
+      <dd>25<span>+</span></dd>
+    </div>
+    <div class="trust__item" data-reveal>
+      <dt>Walls, homes &amp; storefronts</dt>
+      <dd>1,200<span>+</span></dd>
+    </div>
+    <div class="trust__item" data-reveal>
+      <dt>General liability coverage</dt>
+      <dd><span>$</span>2M</dd>
+    </div>
+    <div class="trust__item" data-reveal>
+      <dt>Workmanship warranty</dt>
+      <dd>10<span>-yr</span></dd>
+    </div>
+  </dl>
+  <!-- PLACEHOLDER: confirm each standard with client -->
+  <div class="container">
+    <dl class="trust__standards">
+      <div class="standard">
+        <dt><svg class="icon" aria-hidden="true"><use href="#i-ruler"/></svg> Owner on every job</dt>
+        <dd>The person who quoted it checks the line, the level and the joints.</dd>
+      </div>
+      <div class="standard">
+        <dt><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg> Written warranty</dt>
+        <dd>Ten years on workmanship, in writing, with your final invoice.</dd>
+      </div>
+      <div class="standard">
+        <dt><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Clean sites</dt>
+        <dd>Mortar off the drive, cuttings hauled, lawns respected. Every day.</dd>
+      </div>
+      <div class="standard">
+        <dt><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg> Texas owned</dt>
+        <dd>Family owned, bilingual crews, Texas-made brick where it fits the spec.</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- ===================================================================
+     SERVICES — five specialty cards in running bond (3 over 2).
+     Commercial and residential live in the markets section below.
+     =================================================================== -->
+<section class="section services" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <header class="section-head section-head--split" data-reveal>
+      <div class="section-head__main">
+        <h2 class="section-title" id="services-title">Specialty masonry, start to finish</h2>
+      </div>
+      <div class="section-head__aside">
+        <p class="section-lede">From a mile of subdivision screening wall to one cracked joint on a chimney: the same crew, the same string line, the same standard.</p>
+      </div>
+    </header>
+
+    <ul class="bond" role="list">
+      <li class="svc svc--feature" data-reveal>
+        <svg class="svc__ill" aria-hidden="true"><use href="#svc-screening"/></svg>
+        <div class="svc__body">
+          <p class="svc__tag">Most requested</p><!-- PLACEHOLDER: confirm -->
+          <h3 class="svc__title"><a class="stretched" href="/services/screening-walls/">Screening walls</a></h3>
+          <p class="svc__text">HOA and commercial walls on footings built for clay.</p>
+        </div>
+        <svg class="icon svc__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </li>
+      <li class="svc" data-reveal>
+        <svg class="svc__ill" aria-hidden="true"><use href="#svc-archways"/></svg>
+        <div class="svc__body">
+          <h3 class="svc__title"><a class="stretched" href="/services/archways/">Archways</a></h3>
+          <p class="svc__text">Segmental, elliptical and full-round, with true voussoirs.</p>
+        </div>
+        <svg class="icon svc__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </li>
+      <li class="svc" data-reveal>
+        <svg class="svc__ill" aria-hidden="true"><use href="#svc-cleaning"/></svg>
+        <div class="svc__body">
+          <h3 class="svc__title"><a class="stretched" href="/services/cleaning/">Cleaning</a></h3>
+          <p class="svc__text">Lifts efflorescence and rust without etching the face.</p>
+        </div>
+        <svg class="icon svc__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </li>
+      <li class="svc" data-reveal>
+        <svg class="svc__ill" aria-hidden="true"><use href="#svc-sealing"/></svg>
+        <div class="svc__body">
+          <h3 class="svc__title"><a class="stretched" href="/services/sealing/">Sealing</a></h3>
+          <p class="svc__text">Breathable repellents that make rain bead and roll off.</p>
+        </div>
+        <svg class="icon svc__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </li>
+      <li class="svc" data-reveal>
+        <svg class="svc__ill" aria-hidden="true"><use href="#svc-repairs"/></svg>
+        <div class="svc__body">
+          <h3 class="svc__title"><a class="stretched" href="/services/repairs/">Repairs</a></h3>
+          <p class="svc__text">Tuckpointing and brick matched to color, texture and joint.</p>
+        </div>
+        <svg class="icon svc__arrow" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================================================================
+     COMMERCIAL vs RESIDENTIAL
+     =================================================================== -->
+<section class="markets" aria-labelledby="markets-title">
+  <h2 class="visually-hidden" id="markets-title">Commercial and residential masonry</h2>
+  <div class="markets__grid">
+    <article class="market market--commercial" id="commercial" aria-labelledby="commercial-title">
+      <div class="market__inner" data-reveal>
+        <p class="eyebrow eyebrow--light"><svg class="icon" aria-hidden="true"><use href="#i-building"/></svg> Commercial</p>
+        <h3 class="market__title" id="commercial-title">Bid-ready crews for builders &amp; developers.</h3>
+        <p class="market__lede">We read the drawings, price the scope line by line and show up on the day the schedule says. Mockups, submittals and certificates of insurance on request.</p>
+        <!-- PLACEHOLDER: confirm commercial scope with client -->
+        <ul class="market__list" role="list">
+          <li>Retail, office &amp; mixed-use facades</li>
+          <li>Schools, churches &amp; municipal</li>
+          <li>Multifamily &amp; senior living</li>
+          <li>Monument signs &amp; entry features</li>
+          <li>CMU &amp; structural block</li>
+        </ul>
+        <div class="market__foot">
+          <a class="btn btn--beacon" href="#estimate" data-estimate="commercial">Send us your bid set <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="market__more" href="/commercial/">More on commercial work</a>
+        </div>
+        <p class="market__note">Typical bid turnaround: 2 business days</p><!-- PLACEHOLDER -->
+      </div>
+    </article>
+
+    <article class="market market--residential" id="residential" aria-labelledby="residential-title">
+      <div class="market__inner" data-reveal>
+        <p class="eyebrow"><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg> Residential</p>
+        <h3 class="market__title" id="residential-title">Homes that look better every year.</h3>
+        <p class="market__lede">New builds, additions and the repairs nobody else wants to match. We bring brick and mortar samples to your driveway so the new work disappears into the old.</p>
+        <!-- PLACEHOLDER: confirm residential scope with client -->
+        <ul class="market__list" role="list">
+          <li>Brick &amp; stone exteriors</li>
+          <li>Columns, mailboxes &amp; planters</li>
+          <li>Fireplaces &amp; chimneys</li>
+          <li>Outdoor kitchens &amp; fire pits</li>
+          <li>Retaining &amp; garden walls</li>
+        </ul>
+        <div class="market__foot">
+          <a class="btn btn--brick" href="#estimate" data-estimate="residential">Get a home estimate <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="market__more" href="/residential/">More on residential work</a>
+        </div>
+        <p class="market__note">Free on-site visit</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================================================================
+     FEATURED WORK — screening walls & archways as elevation drawings
+     (no project photography yet; swap in photos when available)
+     =================================================================== -->
+<section class="section projects" id="projects" aria-labelledby="projects-title">
+  <div class="container">
+    <header class="section-head section-head--split" data-reveal>
+      <div class="section-head__main">
+        <h2 class="section-title section-title--light" id="projects-title">Recent screening walls and archways</h2>
+      </div>
+      <div class="section-head__aside">
+        <p class="section-lede section-lede--light">The two jobs that say the most about a mason: long runs that stay dead straight over shifting Texas clay, and arches that carry their load for a century.</p>
+      </div>
+    </header>
+
+    <!-- PLACEHOLDER: project names, locations and specs are illustrative; replace drawings with project photography when available -->
+    <div class="plates">
+      <figure class="plate plate--wide" data-reveal>
+        <div class="plate__art">
+          @@plate-screening@@
+          <span class="plate__label">Elevation · Prosper, TX</span>
+        </div>
+        <figcaption class="plate__body">
+          <p class="plate__kicker">Screening wall</p>
+          <h3 class="plate__title">Subdivision perimeter wall</h3>
+          <ul class="plate__specs" role="list">
+            <li>3,400 linear ft</li><li>Piers 20 ft on center</li><li>8 ft panels</li><li>9 ft 4 in overall</li><li>12 in drilled piers, 10 ft deep</li><li>Cast-stone caps</li>
+          </ul>
+        </figcaption>
+      </figure>
+
+      <figure class="plate" data-reveal>
+        <div class="plate__art">
+          @@plate-archway@@
+          <span class="plate__label">Elevation · Southlake, TX</span>
+        </div>
+        <figcaption class="plate__body">
+          <p class="plate__kicker">Archway</p>
+          <h3 class="plate__title">Full-round entry arch</h3>
+          <ul class="plate__specs" role="list">
+            <li>3 ft 8 in radius</li><li>7 ft 4 in clear opening</li><li>Springline at 7 ft</li><li>19 voussoirs</li><li>Cast-stone keystone</li><li>King-size brick</li>
+          </ul>
+        </figcaption>
+      </figure>
+
+      <figure class="plate" data-reveal>
+        <div class="plate__art">
+          @@plate-arcade@@
+          <span class="plate__label">Elevation · Frisco, TX</span>
+        </div>
+        <figcaption class="plate__body">
+          <p class="plate__kicker">Commercial archways</p>
+          <h3 class="plate__title">Three-bay retail arcade</h3>
+          <ul class="plate__specs" role="list">
+            <li>16 ft bays</li><li>24 ft 6 in tall</li><li>Flemish bond</li><li>Limestone base</li><li>Keystone arches</li>
+          </ul>
+        </figcaption>
+      </figure>
+    </div>
+
+    <p class="projects__more" data-reveal>
+      <a class="btn btn--outline-light" href="/projects/">See all projects <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </p>
+  </div>
+</section>
+
+<!-- ===================================================================
+     RESTORATION — before / after (cleaning, repairs, sealing)
+     =================================================================== -->
+<section class="section restore" id="restoration" aria-labelledby="restore-title">
+  <div class="container restore__grid">
+    <div class="restore__copy" data-reveal>
+      <p class="eyebrow">Cleaning · Repairs · Sealing</p>
+      <h2 class="section-title" id="restore-title">Bring tired brick back</h2>
+      <p class="section-lede">This illustration shows the same wall twice. On the left: efflorescence, grime and a stair-step crack. On the right: the same wall after we clean it, repoint it and seal it. <span class="restore__hint">Drag the slider or tap anywhere on the illustration, or tab to it and use the arrow keys.</span></p>
+
+      <ol class="restore__steps" role="list">
+        <li><span class="restore__n" aria-hidden="true">1</span><div><h3>Clean</h3><p>Low-pressure, masonry-safe wash lifts salts, rust and grime without etching the brick face.</p></div></li>
+        <li><span class="restore__n" aria-hidden="true">2</span><div><h3>Repair</h3><p>Cracked joints are ground out and repointed; spalled brick is replaced with a matched unit.</p></div></li>
+        <li><span class="restore__n" aria-hidden="true">3</span><div><h3>Seal</h3><p>A breathable, penetrating repellent makes rain bead and roll off instead of soaking in.</p></div></li>
+      </ol>
+    </div>
+
+@@ba@@
+  </div>
+</section>
+
+<!-- ===================================================================
+     REVIEWS — one pull quote, a rating badge, two supporting quotes
+     =================================================================== -->
+<section class="section reviews" id="reviews" aria-labelledby="reviews-title">
+  <div class="container">
+    <h2 class="section-title section-title--light reviews__title" id="reviews-title" data-reveal>What builders, boards and homeowners say</h2>
+
+    <!-- PLACEHOLDER: all testimonials are sample copy; replace with real, approved reviews -->
+    <div class="reviews__grid">
+      <figure class="pullquote" data-reveal>
+        <blockquote>
+          <p>They rebuilt 1,800 feet of our perimeter wall and we didn't get a single complaint from residents. Straight lines, clean site, finished a week early.</p>
+        </blockquote>
+        <figcaption>
+          <strong>Karen M.</strong>
+          <span>HOA board president, Frisco · Screening wall</span>
+        </figcaption>
+      </figure>
+
+      <div class="reviews__side">
+        <!-- PLACEHOLDER: rating + review count -->
+        <div class="rating" data-reveal>
+          <svg class="rating__logo" aria-hidden="true"><use href="#i-google"/></svg>
+          <div>
+            <p class="rating__score"><strong>4.9</strong><span class="visually-hidden"> out of 5 stars</span>
+              <span class="stars" aria-hidden="true">
+                <svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg>
+              </span>
+            </p>
+            <p class="rating__meta">From 120+ Google reviews</p>
+          </div>
+        </div>
+
+        <figure class="quote" data-reveal>
+          <blockquote><p>Clear bid, crews showed up when they said, and the brick matched the architect's spec on the first mockup.</p></blockquote>
+          <figcaption><strong>David R.</strong> Project manager, general contractor</figcaption>
+        </figure>
+        <figure class="quote" data-reveal>
+          <blockquote><p>Our 1970s brick looked tired and stained. After cleaning, repointing and sealing, the neighbors asked if we'd re-bricked the house.</p></blockquote>
+          <figcaption><strong>Jessica &amp; Tom L.</strong> Homeowners, Richardson</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================
+     SERVICE AREAS
+     =================================================================== -->
+<section class="section areas" id="areas" aria-labelledby="areas-title">
+  <div class="container areas__grid">
+    <div class="areas__copy" data-reveal>
+      <h2 class="section-title" id="areas-title">Dallas–Fort Worth, up to 60 miles out</h2>
+      <p class="section-lede">Based in Dallas and working across the Metroplex. Don't see your town? Call us. We travel for larger commercial and screening-wall projects.</p><!-- PLACEHOLDER: home base + radius -->
+
+      <!-- PLACEHOLDER: service-area towns need client confirmation -->
+      <ul class="towns" role="list">
+        <li><a href="/service-areas/dallas/">Dallas</a></li>
+        <li><a href="/service-areas/fort-worth/">Fort Worth</a></li>
+        <li><a href="/service-areas/plano/">Plano</a></li>
+        <li><a href="/service-areas/frisco/">Frisco</a></li>
+        <li><a href="/service-areas/mckinney/">McKinney</a></li>
+        <li><a href="/service-areas/allen/">Allen</a></li>
+        <li><a href="/service-areas/prosper/">Prosper</a></li>
+        <li><a href="/service-areas/celina/">Celina</a></li>
+        <li><a href="/service-areas/arlington/">Arlington</a></li>
+        <li><a href="/service-areas/irving/">Irving</a></li>
+        <li><a href="/service-areas/southlake/">Southlake</a></li>
+        <li><a href="/service-areas/grapevine/">Grapevine</a></li>
+        <li><a href="/service-areas/flower-mound/">Flower Mound</a></li>
+        <li><a href="/service-areas/keller/">Keller</a></li>
+        <li><a href="/service-areas/denton/">Denton</a></li>
+        <li><a href="/service-areas/lewisville/">Lewisville</a></li>
+        <li><a href="/service-areas/richardson/">Richardson</a></li>
+        <li><a href="/service-areas/garland/">Garland</a></li>
+        <li><a href="/service-areas/rockwall/">Rockwall</a></li>
+        <li><a href="/service-areas/mesquite/">Mesquite</a></li>
+        <li><a href="/service-areas/mansfield/">Mansfield</a></li>
+        <li><a href="/service-areas/burleson/">Burleson</a></li>
+        <li><a href="/service-areas/weatherford/">Weatherford</a></li>
+        <li><a href="/service-areas/waxahachie/">Waxahachie</a></li>
+      </ul>
+      <p><a class="areas__all" href="/service-areas/">All service areas <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+    </div>
+
+    <figure class="map" data-reveal>
+      <div class="map__art" role="img" aria-label="Map of the Dallas–Fort Worth service area: range rings at 20, 40 and 60 miles around our Dallas home base, covering towns from Denton and Celina in the north to Waxahachie and Burleson in the south, and Weatherford in the west to Rockwall in the east.">
+        @@map@@
+      </div>
+      <figcaption class="map__caption">Range rings from Dallas home base · 20 / 40 / 60 mi</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ===================================================================
+     CONTACT / ESTIMATE
+     =================================================================== -->
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="contact__texture" aria-hidden="true"></div>
+  <div class="container contact__grid">
+    <div class="contact__copy" data-reveal>
+      <h2 class="section-title section-title--light" id="contact-title">Start with a <span class="section-title__serif">free estimate.</span></h2>
+      <p class="section-lede section-lede--light">Tell us about the project and we'll walk it with you. From there: a written, line-item estimate; samples matched and permits handled; an owner-led build; then cleaning, sealing and your written warranty.</p><!-- PLACEHOLDER: process -->
+
+      <dl class="contact__details">
+        <div>
+          <dt><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> Call or text</dt>
+          <dd><a class="contact__phone" href="tel:+12145550142">(214) 555-0142</a></dd><!-- PLACEHOLDER: phone -->
+        </div>
+        <div>
+          <dt><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg> Email</dt>
+          <dd><a href="mailto:info@lighthousemasonrytx.com">info@lighthousemasonrytx.com</a></dd><!-- PLACEHOLDER: email -->
+        </div>
+        <div>
+          <dt><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg> Office</dt>
+          <dd><address>1200 Example Pkwy, Suite 100<br>Dallas, TX 75201</address></dd><!-- PLACEHOLDER: address -->
+        </div>
+      </dl>
+
+      <!-- PLACEHOLDER: office hours -->
+      <table class="hours">
+        <caption><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg> Office hours</caption>
+        <tbody>
+          <tr><th scope="row">Mon – Fri</th><td>7:00 am – 5:00 pm</td></tr>
+          <tr><th scope="row">Saturday</th><td>By appointment</td></tr>
+          <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Static demo: submit is intercepted in js/main.js (method=get only so a no-JS submit can't 405 on static hosting).
+         In production: POST to the backend, add reCAPTCHA v3 (grecaptcha.execute on submit, token verified
+         server-side) and rate-limit. If the reCAPTCHA badge is hidden with CSS, Google requires this disclosure
+         inside the form instead: "This site is protected by reCAPTCHA and the Google Privacy Policy and
+         Terms of Service apply." (with both links).
+         The honeypot field below must stay empty; reject submissions where it isn't. -->
+    <form class="estimate" id="estimate" action="#" method="get" data-estimate-form aria-labelledby="estimate-title">
+      <div class="estimate__head">
+        <h3 class="estimate__title" id="estimate-title">Request a free estimate</h3>
+        <p class="estimate__hint">Fields marked <span aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required.</p>
+      </div>
+
+      <div class="estimate__grid">
+        <div class="field">
+          <label for="f-name">Name <span aria-hidden="true">*</span></label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="field">
+          <label for="f-phone">Phone <span aria-hidden="true">*</span></label>
+          <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+        </div>
+        <div class="field field--full">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="f-service">Service <span aria-hidden="true">*</span></label>
+          <select id="f-service" name="service" required>
+            <option value="">Choose a service</option>
+            <option value="commercial-masonry">Commercial masonry</option>
+            <option value="residential-masonry">Residential masonry</option>
+            <option value="screening-walls">Screening walls</option>
+            <option value="archways">Archways</option>
+            <option value="cleaning">Cleaning</option>
+            <option value="sealing">Sealing</option>
+            <option value="repairs">Repairs</option>
+            <option value="not-sure">Not sure yet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-location">Project city or ZIP</label>
+          <input id="f-location" name="location" type="text">
+        </div>
+        <fieldset class="segmented field--full">
+          <legend>Project type</legend>
+          <label><input type="radio" name="project_type" value="residential" checked><span>Residential</span></label>
+          <label><input type="radio" name="project_type" value="commercial"><span>Commercial</span></label>
+        </fieldset>
+        <div class="field field--full">
+          <label for="f-message">Tell us about the project</label>
+          <textarea id="f-message" name="message" rows="4"></textarea>
+        </div>
+
+        <!-- Honeypot: hidden from people and assistive tech (inert); bots fill it in -->
+        <div class="hp" aria-hidden="true" inert>
+          <label for="f-website">Leave this field empty</label>
+          <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
+      </div>
+
+      <button class="btn btn--beacon btn--lg btn--block estimate__submit" type="submit">
+        Request my free estimate <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </button>
+      <p class="estimate__fine">We'll reply within one business day. We never share your information.</p><!-- PLACEHOLDER -->
+      <!-- Live region stays rendered (only its box collapses when empty) so announcements are never dropped -->
+      <p class="estimate__status" role="status" aria-live="polite" data-estimate-status></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+@@footer@@
+
+</body>
+</html>

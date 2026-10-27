@@ -1,0 +1,61 @@
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ===================================================================
+     HEADER
+     =================================================================== -->
+<header class="site-header" data-header>
+  <div class="site-header__inner container">
+    <a class="brand" href="/" aria-label="Lighthouse Masonry, home">
+      <svg class="brand__mark" aria-hidden="true" focusable="false"><use href="#logo-mark"/></svg>
+      <span class="brand__text" aria-hidden="true">
+        <span class="brand__name">Lighthouse</span>
+        <span class="brand__name brand__name--sub">Masonry</span>
+      </span>
+    </a>
+
+    <nav class="primary-nav" id="primary-nav" aria-label="Primary" data-nav>
+      <ul class="primary-nav__list" role="list">
+        <li class="has-sub" data-submenu>
+          <a class="primary-nav__link" href="@@ROOT@@#services">Services</a>
+          <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-services">
+            <span class="visually-hidden">Services submenu</span>
+            <svg class="icon" aria-hidden="true"><use href="#i-chev"/></svg>
+          </button>
+          <ul class="subnav" id="sub-services" role="list">
+            <li><a href="/commercial/">Commercial</a></li>
+            <li><a href="/residential/">Residential</a></li>
+            <li><a href="/services/screening-walls/">Screening Walls</a></li>
+            <li><a href="/services/archways/">Archways</a></li>
+            <li><a href="/services/cleaning/">Cleaning</a></li>
+            <li><a href="/services/sealing/">Sealing</a></li>
+            <li><a href="/services/repairs/">Repairs</a></li>
+          </ul>
+        </li>
+        <li><a class="primary-nav__link" href="/projects/">Projects</a></li>
+        <li><a class="primary-nav__link" href="/service-areas/">Service Areas</a></li>
+        <li><a class="primary-nav__link" href="/about/">About</a></li>
+      </ul>
+      <div class="primary-nav__mobile-cta">
+        <a class="btn btn--beacon btn--block" href="@@ROOT@@#estimate">Get a free estimate</a>
+        <a class="btn btn--ghost btn--block" href="tel:+12145550142">
+          <svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> (214) 555-0142
+        </a><!-- PLACEHOLDER: phone -->
+      </div>
+    </nav>
+
+    <div class="site-header__actions">
+      <!-- Accessible name is the number itself (visible from 1200px; visually hidden below) -->
+      <a class="header-phone" href="tel:+12145550142">
+        <span class="header-phone__icon"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg></span>
+        <span class="header-phone__text">(214) 555-0142</span>
+      </a><!-- PLACEHOLDER: phone -->
+      <a class="btn btn--beacon btn--sm header-cta" href="@@ROOT@@#estimate">Free estimate</a>
+      <!-- Without JS this jumps to the footer sitemap; JS upgrades it to a menu toggle -->
+      <a class="menu-toggle" href="#footer-nav" data-menu-toggle aria-controls="primary-nav">
+        <svg class="icon icon--open" aria-hidden="true"><use href="#i-menu"/></svg>
+        <svg class="icon icon--close" aria-hidden="true"><use href="#i-close"/></svg>
+        <span class="visually-hidden">Menu</span>
+      </a>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,38 @@
+  <symbol id="svc-screening" viewBox="0 0 64 64">
+    <path style="fill:var(--ill-brick)" d="M7 24h11v32H7zM46 24h11v32H46zM18 32h28v24H18z"/>
+    <path style="stroke:var(--ill-mortar)" fill="none" stroke-width="1.6" d="M7 30h11m28 0h11M7 36h50M7 42h50M7 48h50M12.5 24v6m39-6v6M12.5 36v6m39-6v6M12.5 48v8m39-8v8M25 32v4m14-4v4M32 36v6M25 42v6m14-6v6M32 48v8"/>
+    <path style="fill:var(--ill-stone)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M5 24h15v-3l-7.5-5L5 21ZM44 24h15v-3l-7.5-5L44 21ZM18 28.5h28V32H18Z"/>
+    <path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M7 24v32m11-32v32m28-32v32m11-32v32M3 56h58"/>
+  </symbol>
+  <symbol id="svc-archways" viewBox="0 0 64 64">
+    <path style="fill:var(--ill-brick)" d="M10 56V34a22 22 0 0 1 44 0v22H44V34a12 12 0 0 0-24 0v22Z"/>
+    <path style="fill:var(--ill-glow)" d="M20 56V34a12 12 0 0 1 24 0v22Z"/>
+    <path style="stroke:var(--ill-mortar)" fill="none" stroke-width="1.8" d="m20.9 29.4-9.2-3.8m11.8-.1-7.1-7.1m11-2.6-3.8-9.2m13 9.2 3.8-9.2m.1 11.8 7.1-7.1m-4.5 11 9.2-3.8M10 42h10m24 0h10M10 49h10m24 0h10"/>
+    <path style="fill:var(--ill-stone)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="m29.4 22.6-1.8-12.8h8.8l-1.8 12.8ZM8 33h12.5v3.5H8Zm35.5 0H56v3.5H43.5Z"/>
+    <path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M10 56V34a22 22 0 0 1 44 0v22M20 56V34a12 12 0 0 1 24 0v22M4 56h56"/>
+  </symbol>
+  <symbol id="svc-cleaning" viewBox="0 0 64 64">
+    <path style="fill:var(--ill-brick)" d="M5 28h34v28H5z"/>
+    <path fill="currentColor" opacity=".32" d="M5 28h15v28H5z"/>
+    <path style="stroke:var(--ill-mortar)" fill="none" stroke-width="1.6" d="M5 35h34M5 42h34M5 49h34M14 28v7m14-7v7M21 35v7m14-7v7M14 42v7m14-7v7M21 49v7m14-7v7"/>
+    <path style="stroke:var(--ill-glow)" fill="none" stroke-width="2" stroke-linecap="round" stroke-dasharray="2.5 3.5" d="m45 18-21 14m21-14-15 19m15-19-8 21"/>
+    <path fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" d="m46 17 13-10"/>
+    <path fill="currentColor" d="m43.5 15.5 3.5-2 2.6 3.6-2.4 3.2Z"/>
+    <path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 28h34v28H5zM2 56h40"/>
+  </symbol>
+  <symbol id="svc-sealing" viewBox="0 0 64 64">
+    <path style="fill:var(--ill-brick)" d="M6 26h52v30H6z"/>
+    <path style="stroke:var(--ill-mortar)" fill="none" stroke-width="1.6" d="M6 33.5h52M6 41h52M6 48.5h52M19 26v7.5m13-7.5v7.5m13-7.5v7.5M12.5 33.5V41m13-7.5V41m13-7.5V41m13-7.5V41M19 41v7.5m13-7.5v7.5m13-7.5v7.5M12.5 48.5V56m13-7.5V56m13-7.5V56m13-7.5V56"/>
+    <path style="fill:var(--ill-stone)" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M32 4s-6.5 8-6.5 12.2a6.5 6.5 0 0 0 13 0C38.5 12 32 4 32 4Z"/>
+    <g style="fill:var(--ill-stone)" stroke="currentColor" stroke-width="1.6"><ellipse cx="17" cy="37.5" rx="3.2" ry="2.6"/><ellipse cx="43" cy="30" rx="2.6" ry="2.1"/><ellipse cx="37" cy="45" rx="3.4" ry="2.8"/><ellipse cx="23" cy="52" rx="2.4" ry="2"/><ellipse cx="51" cy="51.5" rx="2.6" ry="2.1"/></g>
+    <path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M6 26h52v30H6zM3 56h58"/>
+  </symbol>
+  <symbol id="svc-repairs" viewBox="0 0 64 64">
+    <path style="fill:var(--ill-brick)" d="M5 14h40v42H5z"/>
+    <path style="stroke:var(--ill-mortar)" fill="none" stroke-width="1.6" d="M5 21h40M5 28h40M5 35h40M5 42h40M5 49h40M15 14v7m20-7v7M25 21v7M15 28v7m20-7v7M25 35v7M15 42v7m20-7v7M25 49v7"/>
+    <path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" d="M28 14v7h-3v7h-6v7h-4v7"/>
+    <path style="fill:var(--ill-stone)" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" d="m30 58 14-17 12 9Z"/>
+    <path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" d="m50 45.5 4.5-7"/>
+    <path fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" d="m55.5 37 4-6"/>
+    <path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M5 14h40v25M5 14v42h22M2 56h26"/>
+  </symbol>

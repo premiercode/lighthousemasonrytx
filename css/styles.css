@@ -1,0 +1,2481 @@
+/* =====================================================================
+   Lighthouse Masonry, Inc. — Homepage
+   ---------------------------------------------------------------------
+   Architecture (cascade layers, lowest → highest priority):
+     reset       → normalize
+     tokens      → design tokens (custom properties)
+     base        → element defaults, typography
+     layout      → container, section rhythm
+     components  → buttons, eyebrow, fields, brand lockup
+     sections    → page sections, in document order
+     motion      → hero build, load + reveal animations, reduced motion
+     utilities   → single-purpose helpers
+
+   Type rule: Archivo Expanded (wdth 118, 800) is reserved for h1, h2,
+   the brand lockup, card titles and big numerals. Body copy and small
+   labels (eyebrows, captions) are Archivo at normal width. Instrument
+   Serif italic appears in exactly two places: the hero payoff line and
+   the contact heading. JetBrains Mono is only for technical labels:
+   drawing specs, form labels and the map caption.
+
+   Color rule: beacon amber is light — it only appears on night
+   surfaces (it fails contrast on limestone). On limestone, the accent
+   is brick. Brick bricks, limestone stone, night sky.
+
+   Texture rule: the running-bond pattern appears in two places only,
+   the services section and the contact section.
+
+   Signature motion: the hero wall is laid course by course, the caps
+   land, then the lighthouse beam comes on (first visit per session
+   only). Everything else is a quiet supporting fade.
+   ===================================================================== */
+
+@layer reset, tokens, base, layout, components, sections, motion, utilities;
+
+/* =====================================================================
+   TOKENS
+   ===================================================================== */
+@layer tokens {
+  :root {
+    /* --- Night: the lighthouse sky ---------------------------------- */
+    --night-950: #0a101c;          /* footer, contact                    */
+    --night-900: #0f1828;          /* hero, about                        */
+    --night-800: #17233a;          /* raised surfaces on night           */
+    --night-700: #24324f;
+    --night-600: #33446a;
+
+    /* --- Fired clay brick -------------------------------------------- */
+    --brick-400: #e8835f;          /* brick text on night (6.6:1)        */
+    --brick-500: #c0532f;          /* brand fill, illustrations          */
+    --brick-600: #a5412a;          /* buttons, white text 6.2:1          */
+    --brick-700: #86331f;          /* hover / pressed                    */
+    --brick-text:#9a3b22;          /* brick text on limestone (5.9:1)    */
+
+    /* --- Limestone + mortar ----------------------------------------- */
+    --lime-50:  #fbf7ef;           /* cards, lightest stone              */
+    --lime-100: #f4ecdc;           /* page background                    */
+    --lime-200: #e9dcc3;           /* alt section / mortar joints        */
+    --lime-300: #d9c8a8;
+    --mortar-300: #c9c2b5;
+    --mortar-500: #7a7368;         /* input borders (4.6:1 on white)     */
+    --mortar-600: #5e5850;         /* secondary text on limestone (6:1)  */
+    --slate-300: #b8c0cf;          /* secondary text on night (9.7:1)    */
+    --slate-400: #94a0b5;
+    --white: #ffffff;
+
+    /* --- Beacon: one warm light. Night surfaces only ---------------- */
+    --beacon:     #f5b841;         /* night text on beacon 10.7:1        */
+    --beacon-300: #ffd27a;
+    --glow-beacon: 0 10px 34px -8px color-mix(in oklch, var(--beacon) 70%, transparent);
+
+    /* --- Semantic ---------------------------------------------------- */
+    --bg:            var(--lime-100);
+    --text:          var(--night-900);
+    --text-muted:    var(--mortar-600);
+    --border:        color-mix(in oklch, var(--night-900) 12%, transparent);
+    --border-strong: color-mix(in oklch, var(--night-900) 24%, transparent);
+    --focus-ring:    var(--night-900);
+    --accent-text:   var(--brick-text);
+
+    /* --- Typography --------------------------------------------------- */
+    --font-display: "Archivo", "Arial Black", "Helvetica Neue", sans-serif;
+    --font-body:    "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-serif:   "Instrument Serif", "Iowan Old Style", Georgia, serif;
+    --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --stretch-display: 118%;
+
+    /* Scale: perfect fourth (1.333) */
+    --step--1: 0.8125rem;
+    --step-0:  1rem;
+    --step-1:  1.333rem;
+    --step-2:  1.777rem;
+    --step-3:  2.369rem;
+
+    --fs-hero:    clamp(1.85rem, min(0.5rem + 7.4vw, 7.2svh), 5.75rem);
+    --fs-section: clamp(1.85rem, 1.15rem + 2.3vw, 3.4rem);
+    --fs-lede:    clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+
+    /* --- Space (4px base) -------------------------------------------- */
+    --space-1: 0.25rem;  --space-2: 0.5rem;   --space-3: 0.75rem;
+    --space-4: 1rem;     --space-5: 1.25rem;  --space-6: 1.5rem;
+    --space-8: 2rem;     --space-10: 2.5rem;  --space-12: 3rem;
+    --space-16: 4rem;    --space-20: 5rem;    --space-24: 6rem;
+    --section-y: clamp(4.5rem, 2rem + 5vw, 7.5rem);
+    --gutter:    clamp(1.25rem, 0.5rem + 3vw, 3rem);
+    --container: 1320px;
+    --header-h:  4.75rem;
+    --tap: 2.75rem;                /* 44px minimum target                */
+
+    /* --- Shape & depth ----------------------------------------------- */
+    --radius-xs: 2px;
+    --radius-sm: 4px;              /* bricks are crisp: small radii      */
+    --radius-md: 8px;
+    --radius-lg: 14px;
+    --shadow-sm: 0 1px 2px rgb(15 24 40 / 0.06), 0 2px 8px rgb(15 24 40 / 0.05);
+    --shadow-md: 0 2px 4px rgb(15 24 40 / 0.05), 0 14px 32px -10px rgb(15 24 40 / 0.22);
+    --shadow-lg: 0 4px 8px rgb(15 24 40 / 0.06), 0 34px 64px -18px rgb(15 24 40 / 0.4);
+
+    /* --- Motion -------------------------------------------------------- */
+    --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-settle:    cubic-bezier(0.2, 0.75, 0.3, 1);
+    --dur-fast: 160ms;
+    --dur-base: 280ms;
+    --dur-slow: 900ms;
+
+    /* --- Textures (SVG data URIs) ----------------------------------- */
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    /* Running bond, 2 courses per tile */
+    --tex-bond-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Cpath d='M0 1h120M0 21h120M1 1v20M61 1v20M31 21v20M91 21v20' fill='none' stroke='%230f1828' stroke-opacity='.07' stroke-width='2'/%3E%3C/svg%3E");
+    --tex-bond-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40'%3E%3Cpath d='M0 1h120M0 21h120M1 1v20M61 1v20M31 21v20M91 21v20' fill='none' stroke='%23fff' stroke-opacity='.045' stroke-width='2'/%3E%3C/svg%3E");
+    /* One course of brick for footers: 2 bricks + head joints per 120px tile */
+    --tex-course: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='14'%3E%3Crect width='120' height='14' fill='%233a2a26'/%3E%3Crect x='0' y='2' width='57' height='12' fill='%23a5412a'/%3E%3Crect x='60' y='2' width='57' height='12' fill='%238f3a25'/%3E%3Crect x='0' y='2' width='57' height='1.5' fill='%23fff' fill-opacity='.12'/%3E%3Crect x='60' y='2' width='57' height='1.5' fill='%23fff' fill-opacity='.1'/%3E%3C/svg%3E");
+    /* Night sky stars */
+    --stars: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='360'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='22' cy='30' r='1' opacity='.7'/%3E%3Ccircle cx='96' cy='88' r='.8' opacity='.45'/%3E%3Ccircle cx='150' cy='22' r='1.2' opacity='.8'/%3E%3Ccircle cx='212' cy='140' r='.7' opacity='.4'/%3E%3Ccircle cx='260' cy='60' r='1' opacity='.6'/%3E%3Ccircle cx='318' cy='12' r='.8' opacity='.5'/%3E%3Ccircle cx='372' cy='110' r='1.3' opacity='.75'/%3E%3Ccircle cx='430' cy='44' r='.7' opacity='.4'/%3E%3Ccircle cx='494' cy='150' r='1' opacity='.6'/%3E%3Ccircle cx='60' cy='190' r='.8' opacity='.45'/%3E%3Ccircle cx='128' cy='250' r='1.1' opacity='.65'/%3E%3Ccircle cx='190' cy='300' r='.7' opacity='.35'/%3E%3Ccircle cx='286' cy='214' r='.9' opacity='.5'/%3E%3Ccircle cx='340' cy='290' r='1.2' opacity='.7'/%3E%3Ccircle cx='410' cy='236' r='.7' opacity='.4'/%3E%3Ccircle cx='470' cy='320' r='1' opacity='.55'/%3E%3Ccircle cx='30' cy='330' r='.8' opacity='.45'/%3E%3Ccircle cx='244' cy='350' r='.6' opacity='.35'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Night-surface context: re-map semantic tokens */
+  .site-header,
+  .hero,
+  .market--commercial,
+  .projects,
+  .reviews,
+  .contact,
+  .site-footer,
+  .svc--feature,
+  .nf {
+    --text:          var(--lime-50);
+    --text-muted:    var(--slate-300);
+    --border:        rgb(255 255 255 / 0.1);
+    --border-strong: rgb(255 255 255 / 0.24);
+    --focus-ring:    var(--beacon);
+    --accent-text:   var(--beacon);
+    color: var(--text);
+  }
+}
+
+/* =====================================================================
+   RESET
+   ===================================================================== */
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body { min-height: 100svh; }
+  img, picture, svg, video { display: block; max-width: 100%; }
+  img { height: auto; }
+  input, button, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; background: none; border: 0; padding: 0; }
+  ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+  a { color: inherit; }
+  table { border-collapse: collapse; }
+  fieldset { border: 0; padding: 0; min-width: 0; }
+  address { font-style: normal; }
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--header-h) + 1rem);
+    color-scheme: light;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  ::selection { background: var(--brick-600); color: var(--white); }
+
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+  .icon { width: 1.25em; height: 1.25em; flex: none; }
+
+  a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+}
+
+/* =====================================================================
+   LAYOUT
+   ===================================================================== */
+@layer layout {
+  .container {
+    width: 100%;
+    max-width: calc(var(--container) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .section {
+    position: relative;
+    padding-block: var(--section-y);
+  }
+
+  .section-head,
+  .section-head__main {
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+  }
+
+  .section-head {
+    max-width: 52rem;
+    margin-bottom: clamp(2.25rem, 1.5rem + 2.5vw, 4rem);
+  }
+
+  .section-head--split {
+    max-width: none;
+    align-items: end;
+  }
+
+  @media (min-width: 960px) {
+    .section-head--split {
+      grid-template-columns: 1.25fr 1fr;
+      gap: var(--space-16);
+    }
+    .section-head__aside { padding-bottom: 0.5rem; }
+  }
+}
+
+/* =====================================================================
+   COMPONENTS
+   ===================================================================== */
+@layer components {
+
+  /* --- Skip link ---------------------------------------------------- */
+  .skip-link {
+    position: fixed;
+    top: var(--space-3);
+    left: var(--space-3);
+    z-index: 100;
+    padding: var(--space-3) var(--space-5);
+    background: var(--beacon);
+    color: var(--night-950);
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    transform: translateY(-200%);
+    transition: transform var(--dur-base) var(--ease-out-expo);
+    &:focus { transform: none; outline-color: var(--night-950); }
+  }
+
+  /* --- Eyebrow (small label with a two-brick glyph) ----------------- */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+
+    &::before {
+      content: "";
+      width: 1.5rem;
+      height: 8px;
+      flex: none;
+      /* two bricks with a 2px head joint */
+      background:
+        linear-gradient(90deg, var(--brick-500) 0 calc(50% - 1px), transparent 0 calc(50% + 1px), var(--brick-500) 0);
+      border-radius: 1px;
+    }
+    & .icon { width: 1.05rem; height: 1.05rem; }
+    &:has(.icon)::before { display: none; }
+  }
+  .eyebrow--light { color: var(--slate-300); }
+  .eyebrow--light::before {
+    background: linear-gradient(90deg, var(--beacon) 0 calc(50% - 1px), transparent 0 calc(50% + 1px), var(--beacon) 0);
+  }
+
+  /* --- Headings ----------------------------------------------------- */
+  .section-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-section);
+    font-weight: 800;
+    font-stretch: var(--stretch-display);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    text-transform: uppercase;
+    color: var(--text);
+    max-width: 22ch;
+  }
+  /* Serif payoff: used once outside the hero (contact heading) */
+  .section-title__serif {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-stretch: normal;
+    font-size: 1.18em;
+    line-height: 0.9;
+    letter-spacing: -0.005em;
+    text-transform: none;
+    color: var(--accent-text);
+  }
+  .section-title--light { color: var(--lime-50); }
+
+  /* Split-column sections share the row with other content: smaller cap */
+  .areas__copy .section-title,
+  .restore__copy .section-title { font-size: clamp(1.75rem, 1rem + 2vw, 2.75rem); }
+
+  .section-lede {
+    font-size: var(--fs-lede);
+    line-height: 1.6;
+    color: var(--text-muted);
+    max-width: 38rem;
+  }
+  .section-lede--light { color: var(--slate-300); }
+
+  /* --- Buttons ------------------------------------------------------ */
+  .btn {
+    --btn-h: 3rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    min-height: var(--btn-h);
+    padding: 0.55rem 1.4rem;
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 0.975rem;
+    font-weight: 650;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform var(--dur-base) var(--ease-out-expo),
+      box-shadow var(--dur-base) var(--ease-out-expo),
+      background-color var(--dur-fast) ease,
+      background-position 0s,
+      border-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
+
+    & .icon { width: 1.15em; height: 1.15em; transition: transform var(--dur-base) var(--ease-out-expo); }
+    &:hover .icon:last-child:not(:first-child) { transform: translateX(3px); }
+    &:active { transform: translateY(0) scale(0.98); }
+  }
+
+  .btn--sm { --btn-h: var(--tap); padding-inline: 1.1rem; font-size: 0.9rem; }
+  .btn--lg { --btn-h: 3.5rem; padding-inline: 1.75rem; font-size: 1.025rem; }
+  .btn--block { width: 100%; }
+
+  /* Beacon: the primary action. A beam sweeps across on hover (a background
+     gradient, so the button never needs overflow clipping and text can wrap).
+     The focus ring comes from the surrounding context, never from amber itself. */
+  .btn--beacon {
+    background-color: var(--beacon);
+    background-image: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.6) 50%, transparent 62%);
+    background-size: 260% 100%;
+    background-position: 130% 0;
+    background-repeat: no-repeat;
+    color: var(--night-950);
+
+    &:hover {
+      background-color: var(--beacon-300);
+      background-position: -30% 0;
+      transform: translateY(-2px);
+      box-shadow: var(--glow-beacon);
+      transition:
+        transform var(--dur-base) var(--ease-out-expo),
+        box-shadow var(--dur-base) var(--ease-out-expo),
+        background-color var(--dur-fast) ease,
+        background-position 700ms var(--ease-out-quart);
+    }
+  }
+
+  /* Brick: the primary action on limestone */
+  .btn--brick {
+    background: var(--brick-600);
+    color: var(--white);
+    &:hover { background: var(--brick-700); transform: translateY(-2px); box-shadow: 0 12px 28px -10px rgb(134 51 31 / 0.6); }
+  }
+
+  .btn--outline-light {
+    border-color: rgb(255 255 255 / 0.4);
+    color: var(--lime-50);
+    background: rgb(255 255 255 / 0.04);
+    &:hover { border-color: var(--lime-50); background: rgb(255 255 255 / 0.1); transform: translateY(-2px); }
+  }
+
+  .btn--ghost {
+    border-color: var(--border-strong);
+    color: var(--text);
+    &:hover { background: rgb(255 255 255 / 0.06); }
+  }
+
+  /* --- Stretched link (full card click target) ---------------------- */
+  .stretched::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  /* --- Stars -------------------------------------------------------- */
+  .stars {
+    display: inline-flex;
+    gap: 2px;
+    color: var(--brick-500);
+    & svg { width: 1.05rem; height: 1.05rem; }
+  }
+
+  /* --- Brand lockup (header + footer) -------------------------------
+     Mark is the inline SVG symbol; wordmark is live text so it scales
+     and inherits color on night or limestone.                         */
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: var(--tap);
+    text-decoration: none;
+    flex: none;
+    color: var(--lime-50);
+  }
+
+  .brand__mark {
+    width: 2.45rem;
+    height: 2.75rem;
+    flex: none;
+  }
+
+  .brand__text {
+    display: grid;
+    line-height: 1;
+    gap: 0.22rem;
+  }
+
+  .brand__name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 118%;
+    font-size: 1.02rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+  }
+  .brand__name--sub { letter-spacing: 0.355em; margin-right: -0.355em; }
+
+  /* --- Form fields --------------------------------------------------- */
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+
+    & label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mortar-600);
+    }
+    & label span { color: var(--brick-text); }
+
+    & input,
+    & select,
+    & textarea {
+      width: 100%;
+      min-width: 0;
+      min-height: 3rem;
+      padding: 0.7rem 0.9rem;
+      border: 1.5px solid var(--mortar-500);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--night-900);
+      font-size: 1rem;
+      transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+    }
+    & textarea { resize: vertical; min-height: 7.5rem; line-height: 1.5; }
+
+    & select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 2.5rem;
+      background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%230f1828' stroke-width='2' stroke-linecap='round' d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.8rem center / 1.1rem;
+      cursor: pointer;
+    }
+
+    & input:hover, & select:hover, & textarea:hover { border-color: var(--night-900); }
+    & input:focus-visible, & select:focus-visible, & textarea:focus-visible {
+      outline: 3px solid var(--night-900);
+      outline-offset: 1px;
+      border-color: var(--night-900);
+    }
+    & input:user-invalid, & select:user-invalid { border-color: var(--brick-600); box-shadow: inset 4px 0 0 var(--brick-600); }
+  }
+}
+
+/* =====================================================================
+   SECTIONS (document order)
+   ===================================================================== */
+@layer sections {
+
+  /* -------------------------------------------------------------------
+     HEADER
+     ------------------------------------------------------------------- */
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    height: var(--header-h);
+
+    &::before { /* backdrop layer so the open mobile menu isn't blurred */
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(to bottom, rgb(10 16 28 / 0.7), transparent);
+      transition: background var(--dur-base) ease, box-shadow var(--dur-base) ease;
+    }
+
+    &.is-scrolled::before {
+      background: rgb(10 16 28 / 0.9);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      backdrop-filter: blur(16px) saturate(140%);
+      box-shadow: 0 1px 0 rgb(255 255 255 / 0.07);
+    }
+  }
+
+  .site-header__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  /* Primary nav — desktop */
+  .primary-nav { display: none; }
+
+  .primary-nav__list {
+    display: flex;
+    align-items: center;
+    gap: clamp(0rem, 0.5vw, 0.5rem);
+  }
+
+  .primary-nav__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding: 0 0.45rem;
+    font-size: 0.925rem;
+    font-weight: 550;
+    color: var(--slate-300);
+    text-decoration: none;
+    transition: color var(--dur-fast) ease;
+
+    &::after { /* mortar-joint underline */
+      content: "";
+      position: absolute;
+      left: 0.45rem;
+      right: 0.45rem;
+      bottom: 0.45rem;
+      height: 2px;
+      background: var(--beacon);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--dur-base) var(--ease-out-expo);
+    }
+
+    &:hover,
+    &[aria-current="page"] { color: var(--white); }
+    &:hover::after,
+    &[aria-current="page"]::after { transform: scaleX(1); transform-origin: left; }
+  }
+
+  .has-sub {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .has-sub > .primary-nav__link { padding-right: 0; &::after { right: 0; } }
+
+  .sub-toggle {
+    display: grid;
+    place-items: center;
+    width: var(--tap);
+    height: var(--tap);
+    color: var(--slate-300);
+    border-radius: var(--radius-xs);
+    & .icon { width: 0.95rem; height: 0.95rem; transition: transform var(--dur-base) var(--ease-out-expo); }
+    &:hover { color: var(--white); }
+  }
+
+  .subnav {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: -0.5rem;
+    min-width: 15.5rem;
+    padding: var(--space-2);
+    background: var(--night-800);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--brick-500);
+    border-radius: var(--radius-sm) var(--radius-sm) var(--radius-md) var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity var(--dur-base) ease, transform var(--dur-base) var(--ease-out-expo), visibility 0s linear var(--dur-base);
+
+    &::before { /* hover bridge */
+      content: "";
+      position: absolute;
+      inset: -0.75rem 0 auto;
+      height: 0.75rem;
+    }
+
+    & a {
+      display: flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding: 0 0.8rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.925rem;
+      color: var(--slate-300);
+      text-decoration: none;
+      &:hover { background: var(--night-700); color: var(--white); }
+    }
+  }
+
+  /* Hover opens for pointer users; the button (.is-open) is the keyboard path.
+     .is-dismissed lets Escape close a hover-opened menu. */
+  .has-sub:hover:not(.is-dismissed) .subnav,
+  .has-sub.is-open .subnav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  .has-sub:hover:not(.is-dismissed) .sub-toggle .icon,
+  .has-sub.is-open .sub-toggle .icon { transform: rotate(180deg); }
+
+  .primary-nav__mobile-cta { display: none; }
+
+  .site-header__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .header-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+    color: var(--lime-50);
+    border-radius: var(--radius-sm);
+  }
+
+  .header-phone__icon {
+    display: grid;
+    place-items: center;
+    width: var(--tap);
+    height: var(--tap);
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease, color var(--dur-fast) ease;
+    & .icon { width: 1.05rem; height: 1.05rem; }
+  }
+  .header-phone:hover .header-phone__icon { background: var(--beacon); border-color: var(--beacon); color: var(--night-950); }
+
+  /* Visually hidden until there's room. It is the link's only text, so the
+     accessible name always matches what sighted users see (WCAG 2.5.3). */
+  .header-phone__text {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    font-weight: 650;
+    font-size: 0.95rem;
+    line-height: 1.15;
+  }
+
+  .header-cta { display: none; }
+
+  .menu-toggle {
+    display: grid;
+    place-items: center;
+    width: var(--tap);
+    height: var(--tap);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    color: var(--lime-50);
+    cursor: pointer;
+    & .icon { width: 1.35rem; height: 1.35rem; grid-area: 1 / 1; }
+    & .icon--close { opacity: 0; }
+  }
+
+  @media (max-width: 359.98px) {
+    .header-phone { display: none; }
+  }
+
+  @media (min-width: 640px) {
+    .header-cta { display: inline-flex; }
+  }
+
+  @media (min-width: 1024px) {
+    .primary-nav { display: block; margin-left: auto; }
+    .site-header__actions { margin-left: var(--space-3); }
+    .menu-toggle { display: none; }
+    /* Narrow chevron so Services isn't followed by a 44px gap; ::before keeps a 44px target */
+    .sub-toggle { position: relative; width: 1.875rem; }
+    .sub-toggle::before { content: ""; position: absolute; inset: 0 -0.625rem 0 -0.25rem; }
+  }
+
+  /* Tight desktop: keep every nav label on one line */
+  .primary-nav__link { white-space: nowrap; }
+  @media (min-width: 1024px) and (max-width: 1199.98px) {
+    .primary-nav__link { padding-inline: 0.35rem; font-size: 0.9rem; }
+    .primary-nav__link::after { left: 0.35rem; right: 0.35rem; }
+  }
+
+  @media (min-width: 1200px) {
+    .header-phone__text {
+      position: static;
+      width: auto; height: auto;
+      overflow: visible;
+      clip: auto;
+      display: block;
+    }
+  }
+
+  /* Mobile menu panel (JS-enhanced) */
+  @media (max-width: 1023.98px) {
+    .js .primary-nav {
+      position: fixed;
+      inset: var(--header-h) 0 0;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-8);
+      padding: var(--space-4) var(--gutter) calc(var(--space-8) + env(safe-area-inset-bottom));
+      background: var(--night-950);
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity var(--dur-base) ease, transform var(--dur-base) var(--ease-out-expo), visibility 0s linear var(--dur-base);
+    }
+
+    .js.nav-open .primary-nav {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      transition-delay: 0s;
+    }
+
+    .nav-open .site-header::before { background: var(--night-950); }
+    .nav-open .menu-toggle .icon--open { opacity: 0; }
+    .nav-open .menu-toggle .icon--close { opacity: 1; }
+    .nav-open { overflow: hidden; }
+
+    .primary-nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    .primary-nav__list > li { display: flex; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+
+    .primary-nav__link {
+      flex: 1;
+      min-height: 3.5rem;
+      font-family: var(--font-display);
+      font-stretch: 112%;
+      font-size: 1.3rem;
+      font-weight: 750;
+      font-stretch: 104%;
+      letter-spacing: -0.01em;
+      letter-spacing: 0;
+      color: var(--lime-50);
+      &::after { display: none; }
+    }
+
+    .sub-toggle { width: 3.25rem; height: 3.5rem; margin: 0; & .icon { width: 1.3rem; height: 1.3rem; } }
+
+    .subnav {
+      position: static;
+      flex-basis: 100%;
+      display: none;
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding: 0 0 var(--space-3);
+      & a { font-size: 1.05rem; padding-inline: 0.75rem; }
+    }
+    .has-sub.is-open .subnav { display: block; }
+    .has-sub:hover .sub-toggle .icon { transform: none; }
+    .has-sub.is-open .sub-toggle .icon { transform: rotate(180deg); }
+
+    .primary-nav__mobile-cta { display: grid; gap: var(--space-3); }
+  }
+
+  /* -------------------------------------------------------------------
+     HERO
+     ------------------------------------------------------------------- */
+  .hero {
+    --wall-h: clamp(180px, max(15vw, 24svh), 480px);
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: min(calc(100svh - 4.5rem), 1000px);
+    background: var(--night-900);
+    overflow: clip;
+  }
+
+  .hero__sky {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 45% at 75% 100%, rgb(245 184 65 / 0.16), transparent 70%),
+      radial-gradient(ellipse 90% 60% at 20% 105%, rgb(192 83 47 / 0.14), transparent 70%),
+      linear-gradient(to bottom, var(--night-950) 0%, var(--night-900) 45%, #1b2742 100%);
+  }
+
+  /* Stars live on their own layer, masked away from every line of text
+     (a star behind a letter reads as a typo). Desktop: clear the copy
+     column and the header row. Small screens: only the strip of sky
+     between the buttons and the wall. */
+  .hero__sky::before,
+  .nf__sky::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--stars) 0 0 / 520px 360px;
+    --star-clear: max(48%, calc(var(--gutter) + 41rem), calc(var(--gutter) + 10.8 * var(--fs-hero)));
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0 var(--star-clear), #000 calc(var(--star-clear) + 14%)),
+      linear-gradient(to bottom, transparent 0 var(--header-h), #000 calc(var(--header-h) + 2rem));
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(90deg, transparent 0 var(--star-clear), #000 calc(var(--star-clear) + 14%)),
+      linear-gradient(to bottom, transparent 0 var(--header-h), #000 calc(var(--header-h) + 2rem));
+    mask-composite: intersect;
+  }
+  .nf__sky::before { --star-clear: max(52%, calc(var(--gutter) + 48rem)); }
+
+  @media (max-width: 799.98px) {
+    .hero__sky::before {
+      -webkit-mask-image: linear-gradient(to top, transparent 0 calc(var(--wall-h) * 0.9), #000 var(--wall-h), #000 calc(var(--wall-h) + 1.75rem), transparent calc(var(--wall-h) + 2.25rem));
+      mask-image: linear-gradient(to top, transparent 0 calc(var(--wall-h) * 0.9), #000 var(--wall-h), #000 calc(var(--wall-h) + 1.75rem), transparent calc(var(--wall-h) + 2.25rem));
+    }
+    .nf__sky::before {
+      -webkit-mask-image: linear-gradient(to top, transparent 0 1.5rem, #000 1.9rem, #000 2.6rem, transparent 3rem);
+      mask-image: linear-gradient(to top, transparent 0 1.5rem, #000 1.9rem, #000 2.6rem, transparent 3rem);
+    }
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 3;
+    align-self: center;
+    padding-top: calc(var(--header-h) + clamp(0.75rem, 3svh, 3.5rem));
+    padding-bottom: clamp(2.5rem, 7svh, 5rem);
+  }
+
+  .hero__copy { max-width: 52rem; }
+
+  .hero__eyebrow { margin-bottom: clamp(1rem, 2.5svh, 1.75rem); }
+  .hero__eyebrow-short { display: none; }
+  @media (max-width: 599.98px) {
+    .hero__eyebrow-long { display: none; }
+    .hero__eyebrow-short { display: inline; }
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-hero);
+    font-weight: 800;
+    font-stretch: 100%;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--lime-50);
+
+    & .line { display: block; overflow: clip; padding-bottom: 0.06em; }
+    & .line > span { display: inline-block; }
+
+    & .line--serif {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      font-stretch: normal;
+      font-size: 1.2em;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      text-transform: none;
+      color: var(--beacon);
+      padding-bottom: 0.12em;
+    }
+  }
+  @media (min-width: 600px) { .hero__title { font-stretch: 110%; } }
+  @media (min-width: 1024px) { .hero__title { font-stretch: var(--stretch-display); } }
+
+  .hero__lede {
+    margin-top: clamp(1rem, 2.5svh, 1.5rem);
+    max-width: 40rem;
+    font-size: var(--fs-lede);
+    line-height: 1.6;
+    color: var(--slate-300);
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+    margin-top: clamp(1.25rem, 3.5svh, 2rem);
+  }
+  /* Mobile: one full-width action; "View services" drops to a text link */
+  @media (max-width: 599.98px) {
+    .hero__ctas .btn--beacon { flex: 1 1 100%; }
+    .hero__ctas .hero__alt {
+      min-height: var(--tap);
+      padding: 0;
+      border: 0;
+      background: none;
+      font-size: 1rem;
+      color: var(--lime-50);
+      text-decoration: underline;
+      text-decoration-color: rgb(255 255 255 / 0.4);
+      text-underline-offset: 0.3em;
+      &:hover { transform: none; text-decoration-color: currentColor; }
+      & .icon { display: none; }
+    }
+  }
+  @media (min-width: 600px) { .hero__alt .icon { display: none; } }
+
+
+  /* Distant lighthouse + beam. Tower tones are pulled ~15% toward the
+     night sky so it sits behind the wall, not beside it. */
+  .hero-lh,
+  .nf__lh {
+    --lh-b0: color-mix(in oklab, #5b2b22 85%, var(--night-900));
+    --lh-b1: color-mix(in oklab, #4d241d 85%, var(--night-900));
+    --lh-b2: color-mix(in oklab, #66322a 85%, var(--night-900));
+    --lh-mortar: color-mix(in oklab, #2a2f40 85%, var(--night-900));
+    --lh-iron: #0d1424;
+  }
+  .hero-lh {
+    position: absolute;
+    z-index: 1;
+    right: -4vw;
+    bottom: calc(var(--wall-h) * 0.55);
+    height: 34svh;
+    aspect-ratio: 240 / 640;
+    opacity: 0.7;
+    pointer-events: none;
+
+    & svg { width: 100%; height: 100%; overflow: visible; }
+  }
+  /* Small screens: tower + main beam only, kept clear of the buttons */
+  @media (max-width: 799.98px) { .hero-lh__beam--back { display: none; } }
+  @media (max-width: 599.98px) {
+    .hero-lh { height: min(26svh, 200px); right: -2vw; bottom: calc(var(--wall-h) * 0.35); }
+  }
+  @media (max-width: 359.98px) { .hero-lh { display: none; } }
+  @media (min-width: 800px) {
+    .hero-lh {
+      right: max(3vw, calc((100vw - var(--container)) / 2 + 1rem));
+      bottom: calc(var(--wall-h) * 0.5);
+      height: min(44svh, 520px);
+      opacity: 1;
+    }
+  }
+  @media (min-width: 1024px) { .hero-lh { height: min(62svh, 620px); } }
+
+  /* Haze where the tower meets the wall, plus a faint horizon line */
+  .hero__haze {
+    position: absolute;
+    z-index: 1;
+    inset: auto 0 calc(var(--wall-h) * 0.5);
+    height: clamp(80px, 18svh, 200px);
+    pointer-events: none;
+    background: linear-gradient(to top, rgb(46 58 88 / 0.8), rgb(36 48 76 / 0.4) 45%, transparent);
+
+    &::after { /* horizon, just above the coping */
+      content: "";
+      position: absolute;
+      inset: auto 0 calc(var(--wall-h) * 0.38);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgb(244 236 220 / 0.07) 25%, rgb(244 236 220 / 0.12) 75%, transparent);
+    }
+  }
+
+  /* Beam: a soft conic wedge rotating about the lamp */
+  .hero-lh__beam {
+    --beam-rest: 188deg;
+    position: absolute;
+    left: 50%;
+    top: 18.9%;
+    width: 160vw;
+    height: 130svh;
+    translate: 0 -50%;
+    transform-origin: 0 50%;
+    rotate: var(--beam-rest);
+    background: conic-gradient(from 72deg at 0 50%,
+      transparent 0deg,
+      rgb(245 184 65 / 0.12) 8deg,
+      rgb(255 210 122 / 0.26) 18deg,
+      rgb(245 184 65 / 0.12) 28deg,
+      transparent 36deg);
+    -webkit-mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.55) 30%, transparent 78%);
+    mask-image: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.55) 30%, transparent 78%);
+    mix-blend-mode: screen;
+  }
+  .hero-lh__beam--back { --beam-rest: 4deg; width: 60vw; opacity: 0.55; }
+
+  /* The wall */
+  @media (max-width: 599.98px) {
+    .hero { --wall-h: clamp(120px, 18svh, 160px); }
+  }
+
+  .hero-wall {
+    --wall-mortar: #6e675d;          /* warm grey: DFW brick uses grey/buff mortar */
+    position: relative;
+    z-index: 2;
+    height: var(--wall-h);
+
+    & .hero-wall__svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    & .m   { fill: var(--wall-mortar); }
+    & .t0  { fill: #8c3b26; }
+    & .t1  { fill: #7f3624; }
+    & .t2  { fill: #96442b; }
+    & .t3  { fill: #773222; }
+    & .t4  { fill: #923f29; }
+    & .tex { fill-opacity: 0.8; }   /* shared per-brick bevel + speckle pattern (~8%) */
+    & .sh  { fill: #05080f; opacity: 0.1; }
+    & .stone    { fill: #a8a08f; }
+    & .stone-hi { fill: #c9c0ad; }
+    & .stone-sh { fill: #05080f; opacity: 0.38; }
+    & .string   { stroke: var(--beacon-300); stroke-width: 2; opacity: 0; }
+  }
+
+  /* Night grade + the beacon's warm wash on the finished wall */
+  .hero-wall__light {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Light comes from the lighthouse side; the left falls into shadow so the
+       wall supports the headline instead of competing with it. */
+    background:
+      radial-gradient(ellipse 45% 120% at 82% -10%, rgb(255 200 110 / 0.3), transparent 70%),
+      linear-gradient(90deg, rgb(10 16 28 / 0.45), transparent 45%),
+      linear-gradient(to bottom, transparent 35%, rgb(10 16 28 / 0.55) 100%);
+    mix-blend-mode: hard-light;
+    /* light the masonry, not the strip of sky above it */
+    -webkit-mask-image: linear-gradient(transparent 6%, #000 22%);
+    mask-image: linear-gradient(transparent 6%, #000 22%);
+  }
+  .hero-wall__grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: var(--noise);
+    opacity: 0.1;
+    mix-blend-mode: overlay;
+    -webkit-mask-image: linear-gradient(transparent 6%, #000 22%);
+    mask-image: linear-gradient(transparent 6%, #000 22%);
+  }
+
+  /* -------------------------------------------------------------------
+     TRUST STRIP — cast-stone footing
+     ------------------------------------------------------------------- */
+  .trust {
+    position: relative;
+    background: var(--lime-200);
+    border-top: 6px solid #b5aa95;
+    box-shadow: inset 0 10px 18px -12px rgb(10 16 28 / 0.55);
+
+    &::before { /* stone grain */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--noise);
+      opacity: 0.22;
+      mix-blend-mode: multiply;
+      filter: invert(1);
+      pointer-events: none;
+    }
+  }
+
+  .trust__list {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .trust__item {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem) clamp(0.75rem, 0.5rem + 1.5vw, 2rem);
+    border-left: 1px solid rgb(15 24 40 / 0.12);
+
+    &:nth-child(odd) { border-left: 0; padding-left: 0; }
+
+    & dt {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mortar-600);
+    }
+    & dd {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 1.4rem + 2.6vw, 3.6rem);
+      font-weight: 800;
+      font-stretch: var(--stretch-display);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--night-900);
+      & span { color: var(--brick-text); }
+    }
+  }
+
+  /* Shared standards: the bottom row of the trust strip */
+  .trust__standards {
+    position: relative;
+    display: grid;
+    gap: var(--space-5) var(--space-8);
+    padding-block: var(--space-6) clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem);
+    border-top: 1px solid rgb(15 24 40 / 0.12);
+  }
+  @media (min-width: 560px) { .trust__standards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 960px) { .trust__standards { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+  @media (max-width: 719.98px) {
+    .trust__item:nth-child(-n + 2) { border-bottom: 1px solid rgb(15 24 40 / 0.12); }
+  }
+  @media (min-width: 720px) {
+    .trust__list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .trust__item:nth-child(odd) { border-left: 1px solid rgb(15 24 40 / 0.12); padding-left: clamp(0.75rem, 0.5rem + 1.5vw, 2rem); }
+    .trust__item:first-child { border-left: 0; padding-left: 0; }
+  }
+
+  /* -------------------------------------------------------------------
+     SERVICES — five landscape "bricks" in running bond (3 over 2)
+     ------------------------------------------------------------------- */
+  /* Hard 6px course where two light sections meet */
+  .services,
+  .markets { border-top: 6px solid var(--lime-300); }
+
+  .services { background: var(--lime-100) var(--tex-bond-light); }
+
+  .bond {
+    --joint: clamp(0.5rem, 0.3rem + 0.6vw, 0.875rem);
+    display: grid;
+    gap: var(--joint);
+  }
+
+  .svc {
+    --ill-brick: var(--brick-500);
+    --ill-mortar: var(--lime-50);
+    --ill-stone: var(--lime-200);
+    --ill-glow: var(--beacon);
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 4.25rem;
+    padding: var(--space-3) var(--space-4);
+    background: var(--lime-50);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.7) inset, 0 2px 3px rgb(15 24 40 / 0.08);
+    color: var(--night-900);
+    transition: transform var(--dur-base) var(--ease-out-expo), box-shadow var(--dur-base) var(--ease-out-expo), border-color var(--dur-fast) ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-strong);
+      z-index: 1;
+      & .svc__arrow { transform: translateX(4px); }
+    }
+    &:focus-within { z-index: 1; }
+  }
+
+  .svc__ill {
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--night-900);
+  }
+
+  .svc__body { display: grid; gap: 0.3rem; min-width: 0; }
+
+  .svc__tag {
+    position: absolute;
+    top: -0.65rem;
+    right: var(--space-4);
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-xs);
+    background: var(--beacon);
+    color: var(--night-950);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .svc__title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-stretch: 104%;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+
+    & a { color: inherit; text-decoration: none; }
+    /* The ring is drawn on the stretched overlay, i.e. around the card and
+       on the page background (night-900 on limestone: ~15:1), for every card. */
+    & a:focus-visible { outline: none; }
+    & a:focus-visible::after { outline: 3px solid var(--night-900); outline-offset: 3px; border-radius: var(--radius-sm); }
+  }
+
+  .svc__text {
+    color: var(--mortar-600);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .svc__arrow {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--brick-text);
+    transition: transform var(--dur-base) var(--ease-out-expo);
+  }
+
+  .svc--feature {
+    --ill-mortar: var(--night-900);
+    --ill-stone: var(--lime-200);
+    background: var(--night-900);
+    border-color: var(--night-900);
+    color: var(--lime-50);
+    box-shadow: 0 2px 3px rgb(15 24 40 / 0.25);
+    & .svc__ill { color: var(--lime-50); }
+    & .svc__text { color: var(--slate-300); }
+    & .svc__arrow { color: var(--beacon); }
+  }
+
+  /* Tablet and up: landscape, brick-proportioned cards with one line of text */
+  @media (min-width: 640px) {
+    .bond { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .svc {
+      grid-column: span 2;
+      align-items: start;
+      gap: var(--space-5);
+      padding: clamp(1.25rem, 1rem + 0.8vw, 1.6rem);
+    }
+    .svc:last-child { grid-column: 2 / span 2; }
+    .svc__ill { width: 4rem; height: 4rem; }
+    .svc__title { font-size: 1.25rem; }
+    .svc__text { font-size: 0.9375rem; }
+    .svc__arrow { align-self: end; }
+  }
+
+  /* Desktop: true running bond. Row 1 spans 1-2, 3-4, 5-6; row 2 sits at 2-3 and 4-5. */
+  @media (min-width: 1100px) {
+    .bond { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .svc:nth-child(1) { grid-column: 1 / 3; }
+    .svc:nth-child(2) { grid-column: 3 / 5; }
+    .svc:nth-child(3) { grid-column: 5 / 7; }
+    .svc:nth-child(4) { grid-column: 2 / 4; }
+    .svc:nth-child(5) { grid-column: 4 / 6; }
+  }
+
+  /* -------------------------------------------------------------------
+     COMMERCIAL vs RESIDENTIAL
+     ------------------------------------------------------------------- */
+  .markets__grid { display: grid; }
+
+  .market {
+    position: relative;
+    display: flex;
+    padding: clamp(3.5rem, 2rem + 5vw, 6.5rem) var(--gutter);
+  }
+
+  .market__inner {
+    position: relative;
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    width: 100%;
+    max-width: 38rem;
+  }
+
+  .market--commercial {
+    background: var(--night-800);
+    justify-content: flex-end;
+  }
+
+  .market--residential { background: var(--lime-200); }
+
+  .market__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.4rem);
+    font-weight: 800;
+    font-stretch: 104%;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+
+  .market__lede { color: var(--text-muted); font-size: var(--fs-lede); max-width: 34rem; }
+
+  .market__list {
+    display: grid;
+    gap: 0;
+    margin-top: var(--space-2);
+    border-top: 1px solid var(--border-strong);
+
+    & li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border);
+      font-weight: 550;
+    }
+    & li::before { /* a single brick bullet */
+      content: "";
+      width: 0.85rem;
+      height: 0.4rem;
+      flex: none;
+      background: var(--brick-500);
+      border-radius: 1px;
+    }
+  }
+  .market--commercial .market__list li::before { background: var(--beacon); }
+
+  .market__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-5);
+    margin-top: var(--space-4);
+  }
+
+  .market__more {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    font-weight: 600;
+    color: var(--text);
+    text-decoration-color: color-mix(in oklch, currentColor 45%, transparent);
+    &:hover { text-decoration-color: currentColor; }
+  }
+
+  .market__note {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .standard {
+    display: grid;
+    gap: var(--space-1);
+    align-content: start;
+
+    & dt {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-weight: 700;
+      color: var(--night-900);
+    }
+    & dt .icon { width: 1.2rem; height: 1.2rem; color: var(--brick-text); }
+    & dd { color: var(--mortar-600); font-size: 0.9375rem; }
+  }
+
+
+  @media (min-width: 960px) {
+    .markets__grid { grid-template-columns: 1fr 1fr; }
+    .market--commercial { padding-right: clamp(2.5rem, 4vw, 5rem); }
+    .market--residential { padding-left: clamp(2.5rem, 4vw, 5rem); }
+  }
+
+  /* -------------------------------------------------------------------
+     FEATURED WORK — plates
+     ------------------------------------------------------------------- */
+  .projects {
+    background: var(--night-950);
+    overflow: clip;
+  }
+
+  .plates {
+    position: relative;
+    display: grid;
+    gap: clamp(1rem, 0.5rem + 1.5vw, 1.75rem);
+  }
+
+  .plate {
+    display: flex;
+    flex-direction: column;
+    background: var(--night-800);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color var(--dur-base) ease, transform var(--dur-base) var(--ease-out-expo);
+
+    &:hover { border-color: var(--border-strong); }
+  }
+
+  /* Elevation drawings: cream linework on night-800, drawn to fit (never cropped) */
+  .plate__art {
+    position: relative;
+    aspect-ratio: 600 / 640;
+    overflow: hidden;
+    background: var(--night-800);
+    border-bottom: 1px solid var(--border);
+
+    & svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    & svg text { font-family: var(--font-mono); }
+  }
+  .plate--wide .plate__art { aspect-ratio: 1200 / 560; }
+
+  @media (max-width: 639.98px) {
+    .dwg :is(.t, .tn, .tbs, .ld, .ko, .dot) { display: none; }
+    /* Centre 600 units of the wide sheet: two panels, the dimensions and the drawing/location cells */
+    .plate--wide .plate__art { aspect-ratio: 600 / 560; }
+    .plate--wide .plate__art svg { left: -50%; width: 200%; max-width: none; }
+  }
+
+  /* Drawing linework (classes used inside the .dwg elevation SVGs) */
+  .dwg {
+    & .l { stroke:var(--lime-100); stroke-width:2; fill:none; stroke-linejoin:round }
+    & .lb { stroke:var(--lime-100); stroke-width:2.6; fill:none; stroke-linejoin:round }
+    & .lt { stroke:var(--lime-100); stroke-width:1; fill:none; opacity:.55 }
+    & .c { stroke:var(--lime-100); stroke-width:.8; fill:none; opacity:.26 }
+    & .hd { stroke:var(--lime-100); stroke-width:.8; fill:none; opacity:.34 }
+    & .hid { stroke:var(--lime-100); stroke-width:1.2; fill:none; stroke-dasharray:7 5; opacity:.55 }
+    & .cl { stroke:var(--lime-100); stroke-width:.8; fill:none; stroke-dasharray:18 4 3 4; opacity:.45 }
+    & .dm { stroke:var(--lime-100); stroke-width:.8; fill:none; opacity:.6 }
+    & .tk { stroke:var(--lime-100); stroke-width:1.6; opacity:.85 }
+    & .ld { stroke:var(--lime-100); stroke-width:.8; fill:none; opacity:.7 }
+    & .dot { fill:var(--lime-100) }
+    & .ko { fill:var(--night-800) }
+    & .g { stroke:var(--lime-100); stroke-width:2.4 }
+    & .gh { stroke:var(--lime-100); stroke-width:.8; opacity:.4 }
+    & .fl { fill:var(--lime-100); fill-opacity:.07 }
+    & .fs { fill:var(--lime-100); fill-opacity:.14 }
+    & .tb { fill:none; stroke:var(--lime-100); stroke-width:1.2; opacity:.8 }
+    & .tbl { stroke:var(--lime-100); stroke-width:1; opacity:.5 }
+    & .frame { fill:none; stroke:var(--lime-100); stroke-width:1; opacity:.35 }
+    & text { fill:var(--lime-100); letter-spacing:.06em }
+    & .t, & .tn { font-size:12px; opacity:.85 }
+    & .td { font-size:13px; opacity:.9 }
+    & .tbs { font-size:9px; opacity:.55; letter-spacing:.14em }
+    & .tbv { font-size:12.5px; font-weight:600 }
+  }
+
+
+  .plate__label {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    padding: 0.3rem 0.55rem;
+    background: var(--night-800);
+    border: 1px solid rgb(244 236 220 / 0.35);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--beacon);
+  }
+
+  .plate__body {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  }
+
+  .plate__kicker {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--slate-300);
+  }
+
+  .plate__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.75rem);
+    font-weight: 800;
+    font-stretch: 104%;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--lime-50);
+  }
+
+  .plate__specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+
+    & li {
+      padding: 0.3rem 0.6rem;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-xs);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--slate-300);
+    }
+  }
+
+  .projects__more { margin-top: clamp(2rem, 1.5rem + 2vw, 3rem); display: flex; justify-content: center; }
+
+  @media (min-width: 900px) {
+    .plates { grid-template-columns: 1fr 1fr; }
+    .plate--wide {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+      & .plate__art { aspect-ratio: 1200 / 560; border-bottom: 0; border-right: 1px solid var(--border); }
+      & .plate__body { align-content: end; padding: var(--space-10) var(--space-8); }
+      & .plate__title { font-size: clamp(1.75rem, 1.2rem + 1.2vw, 2.5rem); }
+    }
+  }
+
+  /* -------------------------------------------------------------------
+     RESTORATION — before / after
+     ------------------------------------------------------------------- */
+  .restore { background: var(--lime-100); }
+
+  .restore__grid {
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+    align-items: center;
+  }
+
+  .restore__copy { display: grid; gap: var(--space-5); }
+
+  .restore__steps {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+
+    & li { display: flex; gap: var(--space-4); align-items: flex-start; }
+    & h3 {
+      font-family: var(--font-display);
+      font-stretch: 104%;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: none;
+      letter-spacing: -0.01em;
+    }
+    & p { color: var(--mortar-600); font-size: 0.975rem; }
+  }
+
+  /* The page's only numbering: Archivo numerals on a brick header */
+  .restore__n {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 1.6rem;
+    flex: none;
+    margin-top: 0.1rem;
+    border-radius: var(--radius-xs);
+    background: var(--brick-600);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-stretch: 112%;
+    font-size: 0.9rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .restore__hint { display: block; margin-top: var(--space-2); font-size: 0.9375rem; font-weight: 600; color: var(--night-900); }
+
+  .ba {
+    position: relative;
+    aspect-ratio: 16 / 11;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #cfc6b6;
+    box-shadow: var(--shadow-lg);
+    isolation: isolate;
+    user-select: none;
+    -webkit-user-select: none;
+
+    & .ba__defs { position: absolute; }
+  }
+
+  .ba__layer {
+    position: absolute;
+    inset: 0;
+    & svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  }
+
+  /* Transform-only reveal: outer slides, inner counter-slides (no repaint of filters) */
+  .ba__layer--before {
+    overflow: hidden;
+    transform: translateX(calc(var(--pos) - 100%));
+    will-change: transform;
+  }
+  .ba__before-inner {
+    position: absolute;
+    inset: 0;
+    transform: translateX(calc(100% - var(--pos)));
+    will-change: transform;
+  }
+
+  .ba__tag {
+    position: absolute;
+    top: 1rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: var(--radius-xs);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .ba__tag--before { left: 1rem; background: var(--night-900); color: var(--lime-50); }
+  .ba__tag--after  { right: 1rem; background: var(--lime-50); color: var(--night-900); }
+
+  .ba__handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 3px;
+    translate: -50% 0;
+    background: var(--lime-50);
+    box-shadow: 0 0 0 1px rgb(15 24 40 / 0.25), 0 0 24px rgb(0 0 0 / 0.35);
+    pointer-events: none;
+    z-index: 2;
+
+    & > span {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      place-items: center;
+      width: 3.25rem;
+      height: 3.25rem;
+      translate: -50% -50%;
+      border-radius: 50%;
+      background: var(--lime-50);
+      color: var(--night-900);
+      box-shadow: var(--shadow-md), 0 0 0 4px rgb(251 247 239 / 0.35);
+      transition: scale var(--dur-base) var(--ease-out-expo);
+    }
+    & .icon { width: 1.4rem; height: 1.4rem; }
+  }
+
+  /* Range input is the real control: full-size and transparent (JS only) */
+  .ba__range {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;          /* pointers are handled on .ba (main.js); keyboard + AT use the range */
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .js .ba { cursor: ew-resize; touch-action: pan-y; }
+  .js .ba__range { display: block; }
+  /* Give the invisible control a real track + thumb so clicks and drags register everywhere */
+  .ba__range::-webkit-slider-runnable-track { height: 100%; background: transparent; }
+  .ba__range::-webkit-slider-thumb { -webkit-appearance: none; width: 2px; height: 100%; background: transparent; cursor: ew-resize; }
+  .ba__range::-moz-range-track { height: 100%; background: transparent; }
+  .ba__range::-moz-range-thumb { width: 2px; height: 100%; border: 0; border-radius: 0; background: transparent; cursor: ew-resize; }
+
+  .ba:hover .ba__handle > span,
+  .ba.is-focused .ba__handle > span { scale: 1.08; }
+  /* Two-tone ring so it holds 3:1 on both the dark grime and the light brick */
+  .ba.is-focused .ba__handle > span,
+  .ba:has(.ba__range:focus-visible) .ba__handle > span {
+    outline: 3px solid var(--night-900);
+    outline-offset: 0;
+    box-shadow: var(--shadow-md), 0 0 0 6px var(--lime-50);
+  }
+
+  @media (min-width: 1024px) {
+    .restore__grid { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
+  }
+
+  /* -------------------------------------------------------------------
+     SERVICE AREAS
+     ------------------------------------------------------------------- */
+  .areas { background: var(--lime-100); }
+
+  .areas__grid {
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 3vw, 4rem);
+    align-items: center;
+  }
+
+  .areas__copy { display: grid; gap: var(--space-5); }
+
+  .towns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-4);
+    margin-top: var(--space-4);
+    border-top: 1px solid var(--border-strong);
+
+    & li { border-bottom: 1px solid var(--border); }
+    & a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: var(--tap);
+      font-weight: 550;
+      text-decoration: none;
+      color: var(--night-900);
+      transition: color var(--dur-fast) ease, transform var(--dur-base) var(--ease-out-expo);
+
+      &::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        flex: none;
+        border-radius: 50%;
+        border: 2px solid var(--brick-500);
+        transition: background var(--dur-fast) ease;
+      }
+      &:hover { color: var(--brick-text); transform: translateX(3px); }
+      &:hover::before { background: var(--brick-500); }
+    }
+  }
+  @media (min-width: 560px) { .towns { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+  .map {
+    position: relative;
+    border-radius: var(--radius-md);
+    background: var(--lime-50);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  }
+
+  .map__art {
+    background: radial-gradient(circle at 50% 50%, rgb(245 184 65 / 0.12), transparent 60%);
+  }
+
+  .areas__all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: var(--tap);
+    font-weight: 650;
+    color: var(--brick-text);
+    & .icon { width: 1.1rem; height: 1.1rem; transition: transform var(--dur-base) var(--ease-out-expo); }
+    &:hover .icon { transform: translateX(3px); }
+  }
+
+  .map__svg {
+    width: 100%;
+    height: auto;
+
+    & text { font-family: var(--font-mono); }
+    & .map__ring { fill: none; stroke: var(--brick-500); stroke-opacity: 0.45; stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; }
+    & .map__ring-label { font-size: 13px; font-weight: 600; fill: var(--brick-text); letter-spacing: 0.08em; }
+    & .map__lake { fill: #cbd8da; }
+    & .map__dot { fill: var(--night-900); }
+    & .map__dot.is-major { fill: var(--brick-600); }
+    & .map__town { font-size: 14px; font-weight: 500; fill: var(--night-800); }
+    & .map__town.is-major { font-weight: 700; font-size: 15px; }
+    & .map__town--hq { font-size: 16px; fill: var(--brick-text); }
+    & .map__hq { color: var(--lime-50); }
+    & .map__hq circle { fill: var(--night-900); }
+    & .map__beam { mix-blend-mode: multiply; }
+  }
+
+  @media (max-width: 639.98px) {
+    .map__svg .map__town:not(.is-major) { display: none; }
+    .map__svg .map__town.is-major { font-size: 24px; }
+    .map__svg .map__ring-label { font-size: 20px; }
+  }
+
+  .map__caption {
+    padding: 0.9rem 1.25rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mortar-600);
+  }
+
+  @media (min-width: 1024px) {
+    .areas__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+  }
+
+  /* -------------------------------------------------------------------
+     REVIEWS — pull quote + rating badge + two supporting quotes
+     ------------------------------------------------------------------- */
+  .reviews { background: var(--night-900); }
+
+  .reviews__title { margin-bottom: clamp(2.25rem, 1.5rem + 2.5vw, 3.5rem); }
+
+  .reviews__grid {
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+    align-items: start;
+  }
+
+  .pullquote {
+    padding-left: clamp(1.25rem, 0.5rem + 2vw, 2rem);
+    border-left: 6px solid var(--brick-500);
+
+    & p {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 1.05rem + 1.7vw, 2.4rem);
+      font-weight: 600;
+      font-stretch: 104%;
+      line-height: 1.22;
+      letter-spacing: -0.012em;
+      color: var(--lime-50);
+      text-wrap: pretty;
+    }
+    & p::before { content: "\201C"; }
+    & p::after  { content: "\201D"; }
+    & figcaption {
+      display: grid;
+      gap: 0.15rem;
+      margin-top: var(--space-6);
+      color: var(--slate-300);
+      & strong { color: var(--lime-50); font-size: 1.05rem; }
+    }
+  }
+
+  .reviews__side { display: grid; gap: var(--space-4); }
+
+  /* Rating badge (Google-style, light card on night) */
+  .rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    background: var(--lime-50);
+    color: var(--night-900);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+
+    & p { margin: 0; }
+  }
+  .rating__logo { width: 2.25rem; height: 2.25rem; flex: none; color: var(--night-900); }
+  .rating__score {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    line-height: 1;
+    & strong { font-family: var(--font-display); font-stretch: 112%; font-size: 1.75rem; font-weight: 800; }
+  }
+  .rating__meta { font-size: 0.9rem; color: var(--mortar-600); margin-top: 0.3rem !important; }
+
+  .quote {
+    padding: var(--space-5) 0 0;
+    border-top: 1px solid var(--border);
+
+    & blockquote p { color: var(--lime-50); font-size: 1rem; line-height: 1.6; }
+    & figcaption {
+      margin-top: var(--space-3);
+      font-size: 0.875rem;
+      color: var(--slate-300);
+      & strong { color: var(--lime-50); font-weight: 650; margin-right: 0.3rem; }
+    }
+  }
+
+  @media (min-width: 960px) {
+    .reviews__grid { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+  }
+
+  /* -------------------------------------------------------------------
+     CONTACT / ESTIMATE
+     ------------------------------------------------------------------- */
+  .contact {
+    background: var(--night-950);
+    overflow: clip;
+  }
+
+  .contact__texture {
+    position: absolute;
+    inset: 0;
+    background: var(--tex-bond-dark);
+    -webkit-mask-image: radial-gradient(ellipse at 0% 100%, #000, transparent 65%);
+    mask-image: radial-gradient(ellipse at 0% 100%, #000, transparent 65%);
+    pointer-events: none;
+  }
+
+  .contact__grid {
+    position: relative;
+    display: grid;
+    gap: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+    align-items: start;
+  }
+
+  .contact__copy { display: grid; gap: var(--space-6); }
+
+  .contact__details {
+    display: grid;
+    gap: var(--space-5);
+    margin-top: var(--space-2);
+
+    & dt {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--slate-300);
+    }
+    & dt .icon { width: 1rem; height: 1rem; color: var(--beacon); }
+    & dd { margin-top: 0.25rem; font-size: 1.05rem; }
+    & dd a { display: inline-flex; align-items: center; min-height: var(--tap); text-decoration-color: rgb(255 255 255 / 0.35); }
+    & dd a:hover { color: var(--beacon); }
+  }
+
+  .contact__phone {
+    font-family: var(--font-display);
+    font-stretch: var(--stretch-display);
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.25rem);
+    font-weight: 800;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .hours {
+    width: 100%;
+    max-width: 24rem;
+    font-size: 0.95rem;
+
+    & caption {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding-bottom: var(--space-2);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--slate-300);
+      text-align: left;
+    }
+    & caption .icon { width: 1rem; height: 1rem; color: var(--beacon); }
+    & th, & td { padding: 0.55rem 0; border-bottom: 1px solid var(--border); text-align: left; }
+    & th { font-weight: 550; }
+    & td { text-align: right; color: var(--slate-300); }
+  }
+
+  .estimate {
+    position: relative;
+    display: grid;
+    gap: var(--space-6);
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    background: var(--lime-50);
+    color: var(--night-900);
+    border-radius: var(--radius-md);
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.7);
+    border-top: 6px solid var(--brick-500);
+    --focus-ring: var(--night-900);
+    --text: var(--night-900);
+    --text-muted: var(--mortar-600);
+    scroll-margin-top: calc(var(--header-h) + 1rem);
+  }
+
+  .estimate__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 1.1rem + 1vw, 1.85rem);
+    font-weight: 800;
+    font-stretch: 104%;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    line-height: 1.1;
+  }
+  .estimate__hint { margin-top: 0.35rem; font-size: 0.9rem; color: var(--mortar-600); }
+
+  .estimate__grid {
+    display: grid;
+    gap: var(--space-5) var(--space-4);
+  }
+  @media (min-width: 560px) {
+    .estimate__grid { grid-template-columns: 1fr 1fr; }
+    .field--full { grid-column: 1 / -1; }
+  }
+
+  .segmented {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: var(--space-2);
+
+    & legend {
+      margin-bottom: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mortar-600);
+    }
+
+    & label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 3rem;
+      padding: 0 0.9rem;
+      border: 1.5px solid var(--mortar-500);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+    }
+    & label:hover { border-color: var(--night-900); }
+
+    & input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.15rem;
+      height: 1.15rem;
+      flex: none;
+      border: 2px solid var(--mortar-500);
+      border-radius: 50%;
+      background: var(--white);
+      transition: border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+    }
+    & input:checked { border-color: var(--brick-600); box-shadow: inset 0 0 0 3px var(--white), inset 0 0 0 10px var(--brick-600); }
+    & input:focus-visible { outline: 3px solid var(--night-900); outline-offset: 2px; }
+
+    & label:has(input:checked) { border-color: var(--brick-600); background: color-mix(in oklch, var(--brick-500) 8%, var(--white)); }
+  }
+
+  /* Forced colors drop box-shadows, which is how the checked dot is drawn */
+  @media (forced-colors: active) {
+    .segmented input:checked {
+      forced-color-adjust: none;
+      border-color: Highlight;
+      background: Highlight;
+      box-shadow: inset 0 0 0 3px Canvas;
+    }
+    .segmented label:has(input:checked) { border-width: 3px; }
+    .segmented input:focus-visible { outline-color: CanvasText; }
+  }
+
+  /* Honeypot: off-screen, out of the tab order, hidden from assistive tech */
+  .hp {
+    position: absolute !important;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .estimate__fine { font-size: 0.875rem; color: var(--mortar-600); text-align: center; margin-top: calc(var(--space-2) * -1); }
+
+  /* Never display:none — the live region must stay in the accessibility tree.
+     Only its visual box collapses while it's empty. */
+  .estimate__status:empty { block-size: 0; padding: 0; margin-top: calc(var(--space-6) * -1); background: none; overflow: hidden; }
+  .estimate__status {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-sm);
+    background: var(--night-900);
+    color: var(--lime-50);
+    font-weight: 550;
+  }
+
+  @media (min-width: 1024px) {
+    .contact__grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+    .contact__copy { position: sticky; top: calc(var(--header-h) + 2rem); }
+  }
+
+  /* -------------------------------------------------------------------
+     FOOTER
+     ------------------------------------------------------------------- */
+  .site-footer {
+    background: #070b14;
+    overflow: clip;
+  }
+
+  /* One slim course of brick laid across the top of the footer */
+  .site-footer__course {
+    height: 14px;
+    background: var(--tex-course) 0 0 / 120px 14px repeat-x;
+    margin-bottom: clamp(3rem, 2rem + 3vw, 4.5rem);
+  }
+
+  .site-footer__top {
+    display: grid;
+    gap: var(--space-10);
+  }
+
+  .site-footer__brand {
+    display: grid;
+    gap: var(--space-5);
+    align-content: start;
+    max-width: 24rem;
+    & p { color: var(--slate-300); font-size: 0.95rem; }
+  }
+
+  .socials {
+    display: flex;
+    gap: var(--space-2);
+    & a {
+      display: grid;
+      place-items: center;
+      width: var(--tap);
+      height: var(--tap);
+      border: 1px solid var(--border-strong);
+      border-radius: 50%;
+      color: var(--lime-50);
+      transition: background var(--dur-fast) ease, color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+      &:hover { background: var(--beacon); border-color: var(--beacon); color: var(--night-950); }
+    }
+    & .icon { width: 1.15rem; height: 1.15rem; }
+  }
+
+  .site-footer h2 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--beacon);
+    margin-bottom: var(--space-2);
+  }
+
+  .site-footer__nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-8) var(--space-6);
+  }
+  .site-footer__nav ul { display: grid; }
+  .site-footer__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    color: var(--slate-300);
+    font-size: 0.95rem;
+    text-decoration: none;
+    &:hover { color: var(--white); text-decoration: underline; }
+  }
+
+  .site-footer__contact {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    font-size: 0.95rem;
+    color: var(--slate-300);
+    & address { margin-top: var(--space-2); }
+  }
+
+  .site-footer__phone {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    font-family: var(--font-display);
+    font-stretch: var(--stretch-display);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--lime-50);
+    text-decoration: none;
+    &:hover { color: var(--beacon); }
+  }
+
+  .site-footer__email {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: var(--tap);
+    color: var(--lime-50);
+    overflow-wrap: anywhere;
+    & .icon { width: 1.05rem; height: 1.05rem; color: var(--beacon); }
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-6);
+    padding-block: var(--space-6) var(--space-8);
+    margin-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+    color: var(--slate-300);
+  }
+
+  .site-footer__legal { display: none; }
+  @media (max-width: 719.98px) {
+    .site-footer__legal-group { display: none; }
+    .site-footer__legal {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 var(--space-5);
+      order: -1;
+      width: 100%;
+      & a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--slate-300); }
+      & a:hover { color: var(--white); }
+    }
+  }
+  @media (min-width: 720px) {
+    .site-footer__nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1100px) {
+    .site-footer__top { grid-template-columns: 1.1fr 2fr 1fr; gap: var(--space-12); }
+  }
+
+  /* -------------------------------------------------------------------
+     404 — "coming in the full build" (served by GitHub Pages for every
+     page that doesn't exist yet)
+     ------------------------------------------------------------------- */
+  .nf {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: center;
+    min-height: min(88svh, 900px);
+    padding-top: calc(var(--header-h) + clamp(2rem, 6svh, 4rem));
+    background: var(--night-900);
+    overflow: clip;
+  }
+
+  .nf__sky {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 60% 50% at 85% 0%, rgb(245 184 65 / 0.14), transparent 70%),
+      linear-gradient(to bottom, var(--night-950), var(--night-900) 60%, #1b2742);
+  }
+
+  /* The homepage lighthouse, static, filling the empty right half */
+  .nf__lh {
+    position: absolute;
+    z-index: -1;
+    right: max(4vw, calc((100vw - var(--container)) / 2 + 2rem));
+    bottom: 20px;
+    height: min(72svh, 640px);
+    aspect-ratio: 240 / 640;
+    opacity: 0.5;
+    pointer-events: none;
+    & svg { width: 100%; height: 100%; overflow: visible; }
+  }
+  @media (max-width: 899.98px) { .nf__lh { display: none; } }
+
+  .nf__inner {
+    display: grid;
+    gap: var(--space-6);
+    justify-items: start;
+    padding-bottom: clamp(4rem, 10svh, 7rem);
+  }
+
+  .nf__title {
+    max-width: 18ch;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.2rem + 3.4vw, 4.25rem);
+    font-weight: 800;
+    font-stretch: var(--stretch-display);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--lime-50);
+  }
+
+  .nf__lede { max-width: 38rem; font-size: var(--fs-lede); color: var(--slate-300); }
+
+  .nf__path {
+    color: var(--slate-300);
+    & code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      padding: 0.1rem 0.4rem;
+      border-radius: var(--radius-xs);
+      background: rgb(255 255 255 / 0.08);
+      color: var(--lime-50);
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .nf__ctas { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4); margin-top: var(--space-2); }
+  @media (max-width: 479.98px) { .nf__ctas .btn { flex: 1 1 100%; } }
+
+  .nf__call {
+    color: var(--slate-300);
+    & a { color: var(--lime-50); font-weight: 650; }
+    & a:hover { color: var(--beacon); }
+  }
+
+  /* A finished cap course along the bottom: the same wall, waiting for the rest */
+  .nf__course {
+    position: absolute;
+    inset: auto 0 0;
+    height: 20px;
+    background:
+      linear-gradient(to bottom, #a8a08f 0 6px, transparent 6px),
+      var(--tex-course) 0 6px / 120px 14px repeat-x;
+  }
+  /* The 404 hero already ends on a brick course; keep the footer's spacing without a second one */
+  .page-404 .site-footer__course { display: none; }
+  .page-404 .site-footer { padding-top: clamp(3rem, 2rem + 3vw, 4.5rem); }
+}
+
+/* =====================================================================
+   MOTION
+   Principle: one signature sequence — the wall is laid, the caps land,
+   the light comes on. Total under five seconds, then everything rests.
+   Without this layer (reduced motion) every element is in its finished
+   state, so nothing depends on an animation completing.
+   ===================================================================== */
+@layer motion {
+  @keyframes rise     { from { transform: translateY(110%); } to { transform: none; } }
+  @keyframes fade-up  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+  @keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+
+  /* Mortar bed is buttered left to right, then bricks drop and settle */
+  @keyframes bed      { from { transform: scaleX(0); } to { transform: none; } }
+  @keyframes lay {
+    0%   { opacity: 0; transform: translateY(-34px); }
+    55%  { opacity: 1; transform: translateY(2px); }
+    78%  { transform: translateY(-1px); }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes cap-drop {
+    0%   { opacity: 0; transform: translateY(-70px); }
+    60%  { opacity: 1; transform: translateY(3px); }
+    80%  { transform: translateY(-2px); }
+    100% { opacity: 1; transform: none; }
+  }
+  /* Mason's line: climbs one course at a time, then is struck */
+  @keyframes string-rise { from { transform: none; } to { transform: translateY(-320px); } }
+  @keyframes string-life { 0% { opacity: 0; } 4%, 88% { opacity: 0.85; } 100% { opacity: 0; } }
+  /* Beacon: lamp ignites, beam sweeps across the wall and up over the headline */
+  @keyframes ignite   { 0% { opacity: 0.15; } 30% { opacity: 1; } 42% { opacity: 0.55; } 60%, 100% { opacity: 1; } }
+  @keyframes sweep {
+    0%   { opacity: 0; rotate: calc(var(--beam-rest) - 28deg); }
+    18%  { opacity: 1; }
+    100% { opacity: 1; rotate: var(--beam-rest); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+
+    /* Everything below plays once per session: a later visit gets
+       .hero--built (set by the inline script in the hero) and starts finished. */
+
+    /* Headline rises line by line while the first courses go down */
+    .hero:not(.hero--built) {
+      & .hero__title .line > span { animation: rise 1.1s var(--ease-out-expo) both; }
+      & .hero__title .line:nth-child(1) > span { animation-delay: 0.1s; }
+      & .hero__title .line:nth-child(2) > span { animation-delay: 0.18s; }
+      & .hero__title .line:nth-child(3) > span { animation-delay: 0.26s; }
+      & .hero__title .line:nth-child(4) > span { animation-delay: 0.4s; }
+
+      & .hero__eyebrow,
+      & .hero__lede,
+      & .hero__ctas { animation: fade-up 1s var(--ease-out-expo) both; }
+      & .hero__lede  { animation-delay: 0.55s; }
+      & .hero__ctas  { animation-delay: 0.65s; }
+
+      /* The build (delays live in --d on each element, written by course + position) */
+      & .hero-wall .m {
+        transform-box: fill-box;
+        transform-origin: 0 50%;
+        animation: bed 0.42s var(--ease-out-quart) var(--d) both;
+      }
+      & .hero-wall .b  { animation: lay 0.55s var(--ease-settle) var(--d) both; }
+      & .hero-wall .sh { animation: fade-in 0.4s ease var(--d) both; }
+      & .hero-wall .cope,
+      & .hero-wall .cap { animation: cap-drop 0.65s var(--ease-settle) var(--d) both; }
+      & .hero-wall .string {
+        animation:
+          string-rise 1.6s steps(8, jump-start) 0.15s both,
+          string-life 1.95s linear 0.1s both;
+      }
+      /* Bricks outside the visible slice of the wall (narrow screens) skip the
+         build; main.js tags them. Off-screen, so finishing early is invisible. */
+      & .hero-wall .is-offscreen { animation: none; }
+
+      & .hero-wall .tex,
+      & .hero-wall__light { animation: fade-in 1.4s ease 2.9s both; }
+      & .hero-lh__lamp,
+      & .hero-lh__glow { animation: ignite 0.9s linear 2.75s both; }
+      & .hero-lh__beam { animation: sweep 1.8s var(--ease-out-quart) 2.9s both; }
+    }
+
+    /* Reveal-on-scroll (only when JS is present to un-hide) */
+    .js [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      transition:
+        opacity var(--dur-slow) var(--ease-out-expo) var(--reveal-delay, 0ms),
+        transform var(--dur-slow) var(--ease-out-expo) var(--reveal-delay, 0ms);
+    }
+    .js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+    /* Cards keep their own hover transition once revealed */
+    .js .svc[data-reveal].is-visible {
+      transition: transform var(--dur-base) var(--ease-out-expo), box-shadow var(--dur-base) var(--ease-out-expo), opacity var(--dur-slow) var(--ease-out-expo) var(--reveal-delay, 0ms);
+    }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* =====================================================================
+   UTILITIES
+   ===================================================================== */
+@layer utilities {
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
